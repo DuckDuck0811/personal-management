@@ -1,0 +1,10 @@
+{
+  "description": "Provides a simple, user-friendly platform for greeting and basic communication, ideal for users seeking quick and easy conversational interaction.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
