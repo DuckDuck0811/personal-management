@@ -1,30 +1,30 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react";
 
-type TicketStatus = "active" | "expired" | "inactive"
+type TicketStatus = "active" | "expired" | "inactive";
 
 type Ticket = {
-  id: string
-  personId: string
-  ticketId: string
-  fullName: string
-  citizenId?: string
-  phone: string
-  organization: string
-  contactUnit: string
-  type: string
-  officerCode: string
-  vehicle?: string
-  status: TicketStatus
-  validTo: string
-  createdAt: string
-  accessDates: string[]
-}
+  id: string;
+  personId: string;
+  ticketId: string;
+  fullName: string;
+  citizenId?: string;
+  phone: string;
+  organization: string;
+  contactUnit: string;
+  type: string;
+  officerCode: string;
+  vehicle?: string;
+  status: TicketStatus;
+  validTo: string;
+  createdAt: string;
+  accessDates: string[];
+};
 
 type PersonGroup = {
-  key: string
-  citizenId?: string
-  tickets: Ticket[]
-}
+  key: string;
+  citizenId?: string;
+  tickets: Ticket[];
+};
 
 const tickets: Ticket[] = [
   {
@@ -96,9 +96,9 @@ const tickets: Ticket[] = [
     ["0061", "2026-06-05", "2026-06-08", "2026-06-05", "2026-06-07"],
     ["0059", "2026-05-22", "2026-05-25", "2026-05-22", "2026-05-24"],
   ].map(([sequence, createdIso, validToIso, accessStart, accessEnd]) => {
-    const [createdYear, createdMonth, createdDay] = createdIso.split("-")
-    const [validYear, validMonth, validDay] = validToIso.split("-")
-    const recordNumber = Number(sequence)
+    const [createdYear, createdMonth, createdDay] = createdIso.split("-");
+    const [validYear, validMonth, validDay] = validToIso.split("-");
+    const recordNumber = Number(sequence);
     return {
       id: `rec-${sequence}`,
       personId: "person-linh",
@@ -107,9 +107,10 @@ const tickets: Ticket[] = [
       citizenId: "900000123478",
       phone: "0912 345 678",
       organization: "CÃ´ng ty TNHH Ká»¹ Thuáº­t Viá»‡t",
-      contactUnit: recordNumber % 2
-        ? "PhÃ²ng Quáº£n trá»‹ há»‡ thá»‘ng"
-        : "PhÃ²ng Háº¡ táº§ng CNTT",
+      contactUnit:
+        recordNumber % 2
+          ? "PhÃ²ng Quáº£n trá»‹ há»‡ thá»‘ng"
+          : "PhÃ²ng Háº¡ táº§ng CNTT",
       type: "KhÃ¡ch bá»™ ngÃ nh",
       officerCode: "NV045",
       vehicle: "30F-67890",
@@ -117,7 +118,7 @@ const tickets: Ticket[] = [
       validTo: `${validDay}/${validMonth}/${validYear}`,
       createdAt: `${createdDay}/${createdMonth}/${createdYear}`,
       accessDates: [accessStart, accessEnd],
-    }
+    };
   }),
   {
     id: "rec-0071",
@@ -199,7 +200,7 @@ const tickets: Ticket[] = [
     createdAt: "01/09/2026",
     accessDates: ["2026-09-01", "2026-09-03"],
   },
-]
+];
 
 const icons = {
   users: (
@@ -252,9 +253,15 @@ const icons = {
     </>
   ),
   close: <path d="M18 6 6 18M6 6l12 12" />,
-}
+};
 
-function Icon({ name, size = 18 }: { name: keyof typeof icons; size?: number }) {
+function Icon({
+  name,
+  size = 18,
+}: {
+  name: keyof typeof icons;
+  size?: number;
+}) {
   return (
     <svg
       width={size}
@@ -269,27 +276,27 @@ function Icon({ name, size = 18 }: { name: keyof typeof icons; size?: number }) 
     >
       {icons[name]}
     </svg>
-  )
+  );
 }
 
 function groupTickets(items: Ticket[]): PersonGroup[] {
-  const groups = new Map<string, PersonGroup>()
+  const groups = new Map<string, PersonGroup>();
   items.forEach((ticket) => {
     // Missing citizen IDs are intentionally isolated by record ID to avoid merging people.
-    const normalizedCitizenId = ticket.citizenId?.replace(/\s/g, "")
+    const normalizedCitizenId = ticket.citizenId?.replace(/\s/g, "");
     const key = normalizedCitizenId
       ? `cccd:${normalizedCitizenId}`
-      : `record:${ticket.id}`
-    const group = groups.get(key)
-    if (group) group.tickets.push(ticket)
+      : `record:${ticket.id}`;
+    const group = groups.get(key);
+    if (group) group.tickets.push(ticket);
     else
       groups.set(key, {
         key,
         citizenId: normalizedCitizenId,
         tickets: [ticket],
-      })
-  })
-  return Array.from(groups.values())
+      });
+  });
+  return Array.from(groups.values());
 }
 
 function sharedValue(group: PersonGroup, field: keyof Ticket) {
@@ -299,11 +306,11 @@ function sharedValue(group: PersonGroup, field: keyof Ticket) {
         .map((ticket) => String(ticket[field] || "").trim())
         .filter(Boolean),
     ),
-  ]
-  if (!values.length) return { value: "—", conflict: false }
+  ];
+  if (!values.length) return { value: "—", conflict: false };
   return values.length === 1
     ? { value: values[0], conflict: false }
-    : { value: "Có nhiều giá trị", conflict: true }
+    : { value: "Có nhiều giá trị", conflict: true };
 }
 
 function initials(name: string) {
@@ -311,47 +318,48 @@ function initials(name: string) {
     .split(" ")
     .slice(-2)
     .map((word) => word[0])
-    .join("")
+    .join("");
 }
 
 function formatCalendarDate(isoDate: string) {
-  const [year, month, day] = isoDate.split("-")
-  return `${day}/${month}/${year}`
+  const [year, month, day] = isoDate.split("-");
+  return `${day}/${month}/${year}`;
 }
 
 const statusLabel: Record<TicketStatus, string> = {
   active: "Đang hiệu lực",
   expired: "Hết hạn",
   inactive: "Không hoạt động",
-}
+};
 
 export default function App() {
-  const [query, setQuery] = useState("")
-  const [type, setType] = useState("")
-  const [status, setStatus] = useState("")
-  const [dateFrom, setDateFrom] = useState("")
-  const [dateTo, setDateTo] = useState("")
+  const [query, setQuery] = useState("");
+  const [type, setType] = useState("");
+  const [status, setStatus] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [expanded, setExpanded] = useState<Set<string>>(
     new Set(["cccd:900000123478"]),
-  )
-  const [selected, setSelected] = useState<Ticket | null>(null)
-  const [calendarMonth, setCalendarMonth] = useState("2026-09")
-  const [selectedCalendarDate, setSelectedCalendarDate] = useState("2026-09-22")
-  const [page, setPage] = useState(1)
-  const [isRefreshing, setIsRefreshing] = useState(false)
-  const pageSize = 4
+  );
+  const [selected, setSelected] = useState<Ticket | null>(null);
+  const [calendarMonth, setCalendarMonth] = useState("2026-09");
+  const [selectedCalendarDate, setSelectedCalendarDate] =
+    useState("2026-09-22");
+  const [page, setPage] = useState(1);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const pageSize = 4;
 
   useEffect(() => {
-    document.documentElement.style.overflow = selected ? "hidden" : ""
-    document.body.style.overflow = selected ? "hidden" : ""
+    document.documentElement.style.overflow = selected ? "hidden" : "";
+    document.body.style.overflow = selected ? "hidden" : "";
     return () => {
-      document.documentElement.style.overflow = ""
-      document.body.style.overflow = ""
-    }
-  }, [selected])
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    };
+  }, [selected]);
 
   const filteredTickets = useMemo(() => {
-    const needle = query.trim().toLocaleLowerCase("vi")
+    const needle = query.trim().toLocaleLowerCase("vi");
     return tickets.filter((ticket) => {
       const searchable = [
         ticket.fullName,
@@ -362,93 +370,96 @@ export default function App() {
         ticket.officerCode,
       ]
         .join(" ")
-        .toLocaleLowerCase("vi")
-      const [day, month, year] = ticket.createdAt.split("/")
-      const createdAt = `${year}-${month}-${day}`
+        .toLocaleLowerCase("vi");
+      const [day, month, year] = ticket.createdAt.split("/");
+      const createdAt = `${year}-${month}-${day}`;
       return (
         (!needle || searchable.includes(needle)) &&
         (!type || ticket.type === type) &&
         (!status || ticket.status === status) &&
         (!dateFrom || createdAt >= dateFrom) &&
         (!dateTo || createdAt <= dateTo)
-      )
-    })
-  }, [query, type, status, dateFrom, dateTo])
+      );
+    });
+  }, [query, type, status, dateFrom, dateTo]);
 
-  const groups = useMemo(() => groupTickets(filteredTickets), [filteredTickets])
-  const pages = Math.max(1, Math.ceil(groups.length / pageSize))
-  const visibleGroups = groups.slice((page - 1) * pageSize, page * pageSize)
+  const groups = useMemo(
+    () => groupTickets(filteredTickets),
+    [filteredTickets],
+  );
+  const pages = Math.max(1, Math.ceil(groups.length / pageSize));
+  const visibleGroups = groups.slice((page - 1) * pageSize, page * pageSize);
   const selectedPersonTickets = useMemo(
     () =>
       selected
         ? tickets.filter((ticket) => ticket.personId === selected.personId)
         : [],
     [selected],
-  )
+  );
 
   const ticketsByAccessDate = useMemo(() => {
-    const grouped = new Map<string, Ticket[]>()
+    const grouped = new Map<string, Ticket[]>();
     selectedPersonTickets.forEach((ticket) => {
       ticket.accessDates.forEach((date) => {
-        grouped.set(date, [...(grouped.get(date) || []), ticket])
-      })
-    })
-    return grouped
-  }, [selectedPersonTickets])
+        grouped.set(date, [...(grouped.get(date) || []), ticket]);
+      });
+    });
+    return grouped;
+  }, [selectedPersonTickets]);
 
   const calendarDays = useMemo(() => {
-    const [year, month] = calendarMonth.split("-").map(Number)
-    const firstDay = new Date(year, month - 1, 1)
-    const totalDays = new Date(year, month, 0).getDate()
-    const mondayOffset = (firstDay.getDay() + 6) % 7
+    const [year, month] = calendarMonth.split("-").map(Number);
+    const firstDay = new Date(year, month - 1, 1);
+    const totalDays = new Date(year, month, 0).getDate();
+    const mondayOffset = (firstDay.getDay() + 6) % 7;
     return [
       ...Array.from({ length: mondayOffset }, () => null),
       ...Array.from({ length: totalDays }, (_, index) => {
-        const day = index + 1
-        return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`
+        const day = index + 1;
+        return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
       }),
-    ]
-  }, [calendarMonth])
+    ];
+  }, [calendarMonth]);
 
   const selectedDayTickets =
-    ticketsByAccessDate.get(selectedCalendarDate) || []
+    ticketsByAccessDate.get(selectedCalendarDate) || [];
 
   function openTicket(ticket: Ticket) {
-    const firstAccessDate = ticket.accessDates[0] || "2026-09-01"
-    setSelected(ticket)
-    setSelectedCalendarDate(firstAccessDate)
-    setCalendarMonth(firstAccessDate.slice(0, 7))
+    const firstAccessDate = ticket.accessDates[0] || "2026-09-01";
+    setSelected(ticket);
+    setSelectedCalendarDate(firstAccessDate);
+    setCalendarMonth(firstAccessDate.slice(0, 7));
   }
 
   function changeCalendarMonth(offset: number) {
-    const [year, month] = calendarMonth.split("-").map(Number)
-    const next = new Date(year, month - 1 + offset, 1)
+    const [year, month] = calendarMonth.split("-").map(Number);
+    const next = new Date(year, month - 1 + offset, 1);
     setCalendarMonth(
       `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, "0")}`,
-    )
+    );
   }
 
   function toggleGroup(key: string) {
     setExpanded((current) => {
-      const next = new Set(current)
-      if (next.has(key)) next.delete(key)
-      else next.add(key)
-      return next
-    })
+      const next = new Set(current);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
   }
 
   function resetFilters() {
-    setQuery("")
-    setType("")
-    setStatus("")
-    setDateFrom("")
-    setDateTo("")
-    setPage(1)
+    setQuery("");
+    setType("");
+    setStatus("");
+    setDateFrom("");
+    setDateTo("");
+    setPage(1);
   }
 
   function refresh() {
-    setIsRefreshing(true)
-    window.setTimeout(() => setIsRefreshing(false), 650)
+    setIsRefreshing(true);
+    window.setTimeout(() => setIsRefreshing(false), 650);
   }
 
   function exportCsv() {
@@ -461,7 +472,7 @@ export default function App() {
       "don_vi",
       "trang_thai",
       "hieu_luc_den",
-    ]
+    ];
     const rows = filteredTickets.map((ticket) => [
       ticket.id,
       ticket.ticketId,
@@ -471,19 +482,19 @@ export default function App() {
       ticket.organization,
       statusLabel[ticket.status],
       ticket.validTo,
-    ])
+    ]);
     const csv = [columns, ...rows]
       .map((row) =>
         row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(","),
       )
-      .join("\n")
-    const link = document.createElement("a")
+      .join("\n");
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(
       new Blob(["\ufeff", csv], { type: "text/csv;charset=utf-8" }),
-    )
-    link.download = "danh-sach-ca-nhan.csv"
-    link.click()
-    URL.revokeObjectURL(link.href)
+    );
+    link.download = "danh-sach-ca-nhan.csv";
+    link.click();
+    URL.revokeObjectURL(link.href);
   }
 
   return (
@@ -580,8 +591,8 @@ export default function App() {
                   <input
                     value={query}
                     onChange={(event) => {
-                      setQuery(event.target.value)
-                      setPage(1)
+                      setQuery(event.target.value);
+                      setPage(1);
                     }}
                     placeholder="Họ tên, CCCD, mã phiếu..."
                   />
@@ -592,8 +603,8 @@ export default function App() {
                 <select
                   value={type}
                   onChange={(event) => {
-                    setType(event.target.value)
-                    setPage(1)
+                    setType(event.target.value);
+                    setPage(1);
                   }}
                 >
                   <option value="">Tất cả loại</option>
@@ -609,8 +620,8 @@ export default function App() {
                 <select
                   value={status}
                   onChange={(event) => {
-                    setStatus(event.target.value)
-                    setPage(1)
+                    setStatus(event.target.value);
+                    setPage(1);
                   }}
                 >
                   <option value="">Tất cả trạng thái</option>
@@ -625,8 +636,8 @@ export default function App() {
                   type="date"
                   value={dateFrom}
                   onChange={(event) => {
-                    setDateFrom(event.target.value)
-                    setPage(1)
+                    setDateFrom(event.target.value);
+                    setPage(1);
                   }}
                   aria-label="Từ ngày"
                 />
@@ -637,8 +648,8 @@ export default function App() {
                   type="date"
                   value={dateTo}
                   onChange={(event) => {
-                    setDateTo(event.target.value)
-                    setPage(1)
+                    setDateTo(event.target.value);
+                    setPage(1);
                   }}
                   aria-label="Đến ngày"
                 />
@@ -654,7 +665,6 @@ export default function App() {
                   {groups.length} cá nhân · {filteredTickets.length} phiếu
                 </span>
               </div>
-
             </div>
 
             {isRefreshing && <div className="loading-bar" />}
@@ -671,11 +681,11 @@ export default function App() {
                   <span>THAO TÁC</span>
                 </div>
                 {visibleGroups.map((group) => {
-                  const isOpen = expanded.has(group.key)
-                  const name = sharedValue(group, "fullName")
-                  const phone = sharedValue(group, "phone")
-                  const organization = sharedValue(group, "organization")
-                  const contactUnit = sharedValue(group, "contactUnit")
+                  const isOpen = expanded.has(group.key);
+                  const name = sharedValue(group, "fullName");
+                  const phone = sharedValue(group, "phone");
+                  const organization = sharedValue(group, "organization");
+                  const contactUnit = sharedValue(group, "contactUnit");
                   return (
                     <article
                       className={`person-group ${isOpen ? "open" : ""}`}
@@ -716,8 +726,8 @@ export default function App() {
                         <button
                           className="view-button"
                           onClick={(event) => {
-                            event.stopPropagation()
-                            openTicket(group.tickets[0])
+                            event.stopPropagation();
+                            openTicket(group.tickets[0]);
                           }}
                         >
                           <Icon name="eye" size={17} />
@@ -815,7 +825,7 @@ export default function App() {
                         </div>
                       )}
                     </article>
-                  )
+                  );
                 })}
               </div>
             ) : (
@@ -972,10 +982,10 @@ export default function App() {
                             value={calendarMonth}
                             aria-label="Chọn tháng xem lịch ra vào"
                             onChange={(event) => {
-                              const month = event.target.value
-                              if (!month) return
-                              setCalendarMonth(month)
-                              setSelectedCalendarDate(`${month}-01`)
+                              const month = event.target.value;
+                              if (!month) return;
+                              setCalendarMonth(month);
+                              setSelectedCalendarDate(`${month}-01`);
                             }}
                           />
                           <button
@@ -1062,9 +1072,7 @@ export default function App() {
                                 onClick={() => setSelected(ticket)}
                               >
                                 <div className="day-ticket-topline">
-                                  <span
-                                    className={`status ${ticket.status}`}
-                                  >
+                                  <span className={`status ${ticket.status}`}>
                                     <i />
                                     {statusLabel[ticket.status]}
                                   </span>
@@ -1212,6 +1220,5 @@ export default function App() {
         </section>
       )}
     </div>
-  )
+  );
 }
-
