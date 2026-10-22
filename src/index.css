@@ -814,8 +814,9 @@ td small { margin-top: 3px; color: #64748b; font-size: 12px; }
 }
 .detail-page-heading { 
   display: flex; 
-  align-items: center; 
-  gap: 18px; 
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
   margin-bottom: 20px; 
 }
 .detail-page-heading h1 { 
