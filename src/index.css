@@ -149,7 +149,9 @@ td small { margin-top: 4px; color: #8d97a7; font-size: 7px; }
 .pagination button { width: 28px; height: 28px; border: 1px solid #dfe4eb; border-radius: 6px; color: #59667a; background: white; font-size: 9px; }
 .pagination button.current { color: white; border-color: #2f63da; background: #2f63da; }
 .pagination button:disabled { cursor: not-allowed; opacity: .45; }
-.ticket-pagination { min-height: 46px; padding: 0 8px; border-top: 0; }
+.ticket-pagination { min-height: 56px; padding: 0 14px; border-top: 1px solid #e8edf4; background: #fbfcfe; }
+.ticket-pagination > span { color: #64738a; font-size: 10px; }
+.ticket-pagination button { width: 32px; height: 32px; font-size: 12px; }
 .empty-state { display: flex; min-height: 280px; flex-direction: column; align-items: center; justify-content: center; color: #8a96a8; }
 .empty-state > div { width: 52px; height: 52px; display: grid; place-items: center; margin-bottom: 12px; border-radius: 50%; color: #7d8ba0; background: #f0f3f7; }
 .empty-state strong { color: #3e4a5e; font-size: 12px; }
@@ -277,6 +279,72 @@ td small { margin-top: 4px; color: #8d97a7; font-size: 7px; }
 .detail-record-note { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border: 1px solid #d8e4fb; border-radius: 8px; color: #4165a8; background: #edf4ff; }
 .detail-record-note svg { flex: 0 0 auto; }
 .detail-record-note p { margin: 0; font-size: 8px; line-height: 1.65; }
+
+/* Personal detail page refinements. The registration calendar styles above are
+   intentionally left untouched. */
+.detail-page-inner { max-width: 1680px; padding: 28px clamp(20px, 3vw, 44px) 48px; }
+.detail-page-heading { flex-direction: row; align-items: center; gap: 18px; margin-bottom: 22px; }
+.detail-page-heading h1 { font-size: 26px; }
+.detail-page-heading p { margin-top: 5px; font-size: 12px; }
+.detail-back-button { flex: 0 0 auto; }
+.detail-layout { grid-template-columns: minmax(270px, 310px) minmax(0, 1fr); gap: 20px; }
+.profile-card,.detail-card { border-color: #d8e1ec; border-radius: 12px; box-shadow: 0 3px 12px rgba(29, 49, 79, .045); }
+.profile-identity { padding: 26px 20px 22px; background: linear-gradient(180deg, #f8faff 0%, #fff 100%); }
+.profile-avatar { width: 76px; height: 76px; margin-bottom: 12px; color: #2859b7; background: #e7efff; font-size: 22px; }
+.profile-identity h2 { font-size: 18px; }
+.profile-validity { padding: 16px 20px; background: #f8faff; }
+.profile-validity span,.profile-info dt { color: #78869a; font-size: 10px; }
+.profile-validity strong { color: #23334c; font-size: 12px; }
+.profile-validity small { font-size: 9px; }
+.profile-info { padding: 8px 20px 18px; }
+.profile-info > div { grid-template-columns: minmax(85px, .75fr) minmax(0, 1.25fr); gap: 12px; padding: 11px 0; font-size: 10px; }
+.profile-info dd { color: #27364b; font-weight: 600; line-height: 1.5; }
+.type-chip { max-width: 100%; font-size: 9px; }
+.detail-main-column { gap: 20px; }
+.detail-card-title { min-height: 58px; padding-inline: 20px; }
+.detail-card-title strong { font-size: 14px; }
+.access-card .detail-card-title { background: #fff; }
+.access-table { min-width: 780px; }
+.access-table th { height: 42px; color: #68778d; background: #f8faff; font-size: 9px; }
+.access-table td { height: 52px; color: #344258; font-size: 10px; }
+.system-chip,.result-granted { font-size: 9px; }
+.direction-in,.direction-out { font-size: 20px; }
+.text-link { font-size: 9px; }
+.detail-record-note { padding: 13px 16px; border-radius: 10px; }
+.detail-record-note p { font-size: 10px; }
+.profile-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0 0 18px; }
+.summary-tile { min-height: 82px; display: flex; align-items: center; gap: 13px; padding: 14px 16px; border: 1px solid #dce5f2; border-radius: 12px; background: linear-gradient(120deg, #fff, #f8faff); box-shadow: 0 3px 12px rgba(29,49,79,.035); }
+.summary-icon { width: 38px; height: 38px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 11px; color: #3167ce; background: #eaf1ff; font-size: 20px; font-weight: 700; }
+.summary-zones .summary-icon { color: #923ec1; background: #f5eaff; }
+.summary-latest .summary-icon { color: #13845e; background: #e5f7ef; }
+.summary-tile div { min-width: 0; }
+.summary-tile small,.summary-tile strong,.summary-tile div > span { display: block; }
+.summary-tile small { color: #8090a6; font-size: 8px; font-weight: 700; letter-spacing: .055em; }
+.summary-tile strong { margin-top: 5px; color: #20314b; font-size: 14px; }
+.summary-tile div > span { margin-top: 4px; overflow: hidden; color: #8390a3; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.profile-kind { margin-bottom: 10px; padding: 4px 8px; border-radius: 12px; color: #526d9d; background: #edf3ff; font-size: 8px; font-weight: 800; letter-spacing: .08em; }
+.profile-role { margin: -4px 0 9px; padding: 5px 9px; border-radius: 12px; color: #6946b4; background: #f1ebff; font-size: 9px; font-weight: 600; }
+.profile-identity .status { font-size: 8px; }
+
+@media (max-width: 900px) {
+  .profile-summary { grid-template-columns: 1fr; gap: 8px; }
+  .summary-tile { min-height: 70px; }
+  .detail-page-inner { padding: 20px 16px 32px; }
+  .detail-layout { grid-template-columns: minmax(0, 1fr); }
+  .profile-card { display: grid; grid-template-columns: minmax(200px, .8fr) minmax(0, 1.2fr); }
+  .profile-identity { grid-row: span 2; justify-content: center; }
+  .profile-validity { align-self: end; }
+  .profile-info { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; }
+}
+@media (max-width: 560px) {
+  .detail-page-heading { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .detail-page-heading h1 { font-size: 22px; }
+  .profile-card { display: block; }
+  .profile-info { display: block; }
+  .profile-info > div { grid-template-columns: 105px minmax(0, 1fr); }
+  .detail-card-title { padding-inline: 14px; }
+  .detail-card-content { padding: 12px; }
+}
 
 @media (max-width: 1400px) {
   .detail-layout { grid-template-columns: 300px minmax(0,1fr); }

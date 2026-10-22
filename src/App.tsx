@@ -103,15 +103,13 @@ const tickets: Ticket[] = [
       id: `rec-${sequence}`,
       personId: "person-linh",
       ticketId: `TICKET-${createdYear}${createdMonth}${createdDay}-${sequence}`,
-      fullName: "HoÃ ng Báº£o Linh",
+      fullName: "Hoàng Bảo Linh",
       citizenId: "900000123478",
       phone: "0912 345 678",
-      organization: "CÃ´ng ty TNHH Ká»¹ Thuáº­t Viá»‡t",
+      organization: "Công ty TNHH Kỹ Thuật Việt",
       contactUnit:
-        recordNumber % 2
-          ? "PhÃ²ng Quáº£n trá»‹ há»‡ thá»‘ng"
-          : "PhÃ²ng Háº¡ táº§ng CNTT",
-      type: "KhÃ¡ch bá»™ ngÃ nh",
+        recordNumber % 2 ? "Phòng Quản trị hệ thống" : "Phòng Hạ tầng CNTT",
+      type: "Khách bộ ngành",
       officerCode: "NV045",
       vehicle: "30F-67890",
       status: "expired" as const,
@@ -200,7 +198,14 @@ const tickets: Ticket[] = [
     createdAt: "01/09/2026",
     accessDates: ["2026-09-01", "2026-09-03"],
   },
-];
+].map((ticket) =>
+  ticket.personId === "person-linh"
+    ? {
+        ...ticket,
+        accessDates: Array.from(new Set([...ticket.accessDates, "2026-09-22"])),
+      }
+    : ticket,
+);
 
 const icons = {
   users: (
@@ -346,8 +351,10 @@ export default function App() {
   const [selectedCalendarDate, setSelectedCalendarDate] =
     useState("2026-09-22");
   const [page, setPage] = useState(1);
+  const [ticketPages, setTicketPages] = useState<Record<string, number>>({});
   const [isRefreshing, setIsRefreshing] = useState(false);
   const pageSize = 4;
+  const ticketPageSize = 5;
 
   useEffect(() => {
     document.documentElement.style.overflow = selected ? "hidden" : "";
@@ -682,6 +689,18 @@ export default function App() {
                 </div>
                 {visibleGroups.map((group) => {
                   const isOpen = expanded.has(group.key);
+                  const ticketPagesCount = Math.max(
+                    1,
+                    Math.ceil(group.tickets.length / ticketPageSize),
+                  );
+                  const ticketPage = Math.min(
+                    ticketPages[group.key] || 1,
+                    ticketPagesCount,
+                  );
+                  const visibleTickets = group.tickets.slice(
+                    (ticketPage - 1) * ticketPageSize,
+                    ticketPage * ticketPageSize,
+                  );
                   const name = sharedValue(group, "fullName");
                   const phone = sharedValue(group, "phone");
                   const organization = sharedValue(group, "organization");
@@ -761,7 +780,7 @@ export default function App() {
                                 </tr>
                               </thead>
                               <tbody>
-                                {group.tickets.map((ticket) => (
+                                {visibleTickets.map((ticket) => (
                                   <tr key={ticket.id}>
                                     <td>
                                       <button
@@ -822,6 +841,64 @@ export default function App() {
                               </tbody>
                             </table>
                           </div>
+                          {ticketPagesCount > 1 && (
+                            <div className="pagination ticket-pagination">
+                              <span>
+                                Hiển thị {(ticketPage - 1) * ticketPageSize + 1}
+                                –
+                                {Math.min(
+                                  ticketPage * ticketPageSize,
+                                  group.tickets.length,
+                                )}{" "}
+                                / {group.tickets.length} phiếu
+                              </span>
+                              <div>
+                                <button
+                                  aria-label="Trang phiếu trước"
+                                  disabled={ticketPage === 1}
+                                  onClick={() =>
+                                    setTicketPages((current) => ({
+                                      ...current,
+                                      [group.key]: ticketPage - 1,
+                                    }))
+                                  }
+                                >
+                                  ‹
+                                </button>
+                                {Array.from(
+                                  { length: ticketPagesCount },
+                                  (_, index) => index + 1,
+                                ).map((value) => (
+                                  <button
+                                    className={
+                                      value === ticketPage ? "current" : ""
+                                    }
+                                    key={value}
+                                    onClick={() =>
+                                      setTicketPages((current) => ({
+                                        ...current,
+                                        [group.key]: value,
+                                      }))
+                                    }
+                                  >
+                                    {value}
+                                  </button>
+                                ))}
+                                <button
+                                  aria-label="Trang phiếu sau"
+                                  disabled={ticketPage === ticketPagesCount}
+                                  onClick={() =>
+                                    setTicketPages((current) => ({
+                                      ...current,
+                                      [group.key]: ticketPage + 1,
+                                    }))
+                                  }
+                                >
+                                  ›
+                                </button>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       )}
                     </article>
@@ -894,13 +971,60 @@ export default function App() {
               </div>
             </div>
 
+            <section className="profile-summary" aria-label="Tóm tắt truy cập">
+              <article className="summary-tile summary-access">
+                <span className="summary-icon">↗</span>
+                <div>
+                  <small>PHIẾU TRONG NGÀY</small>
+                  <strong>{selectedDayTickets.length} phiếu</strong>
+                  <span>{formatCalendarDate(selectedCalendarDate)}</span>
+                </div>
+              </article>
+              <article className="summary-tile summary-zones">
+                <span className="summary-icon">⌖</span>
+                <div>
+                  <small>PHIẾU CÒN HIỆU LỰC</small>
+                  <strong>
+                    {
+                      selectedDayTickets.filter(
+                        (ticket) => ticket.status === "active",
+                      ).length
+                    }{" "}
+                    phiếu
+                  </strong>
+                  <span>
+                    {
+                      selectedDayTickets.filter(
+                        (ticket) => ticket.status !== "active",
+                      ).length
+                    }{" "}
+                    phiếu hết hạn hoặc ngừng
+                  </span>
+                </div>
+              </article>
+              <article className="summary-tile summary-latest">
+                <span className="summary-icon">◷</span>
+                <div>
+                  <small>NGÀY ĐANG CHỌN</small>
+                  <strong>{formatCalendarDate(selectedCalendarDate)}</strong>
+                  <span>
+                    {selectedDayTickets.length
+                      ? `Đang áp dụng ${selectedDayTickets.length} phiếu đăng ký`
+                      : "Không có phiếu đăng ký trong ngày"}
+                  </span>
+                </div>
+              </article>
+            </section>
+
             <div className="detail-layout">
               <aside className="profile-card">
                 <div className="profile-identity">
+                  <span className="profile-kind">HỒ SƠ KHÁCH</span>
                   <div className="profile-avatar">
                     {initials(selected.fullName)}
                   </div>
                   <h2>{selected.fullName}</h2>
+                  <span className="profile-role">{selected.type}</span>
                   <span className={`status ${selected.status}`}>
                     <i />
                     {statusLabel[selected.status]}
