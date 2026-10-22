@@ -211,6 +211,65 @@ const icons = {
   users: (
     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
   ),
+  user: (
+    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
+  ),
+  idCard: (
+    <>
+      <rect x="2" y="5" width="20" height="14" rx="2" />
+      <path d="M6 10h4M6 14h8M16 10h2" />
+    </>
+  ),
+  phone: (
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+  ),
+  building: (
+    <>
+      <rect x="4" y="2" width="16" height="20" rx="2" />
+      <path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01" />
+    </>
+  ),
+  building2: (
+    <>
+      <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18ZM2 22h20" />
+      <path d="M10 6h4M10 10h4M10 14h4M10 18h4" />
+    </>
+  ),
+  gear: (
+    <>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+    </>
+  ),
+  car: (
+    <>
+      <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 3.3C2 11.5 2 11.8 2 12v4c0 .6.4 1 1 1h2" />
+      <circle cx="7" cy="17" r="2" />
+      <path d="M9 17h6" />
+      <circle cx="17" cy="17" r="2" />
+    </>
+  ),
+  calendar: (
+    <>
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+      <line x1="16" y1="2" x2="16" y2="6" />
+      <line x1="8" y1="2" x2="8" y2="6" />
+      <line x1="3" y1="10" x2="21" y2="10" />
+    </>
+  ),
+  alert: (
+    <>
+      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+      <line x1="12" y1="9" x2="12" y2="13" />
+      <line x1="12" y1="17" x2="12.01" y2="17" />
+    </>
+  ),
+  bell: (
+    <>
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+    </>
+  ),
   search: (
     <>
       <circle cx="11" cy="11" r="8" />
@@ -301,7 +360,14 @@ function groupTickets(items: Ticket[]): PersonGroup[] {
         tickets: [ticket],
       });
   });
-  return Array.from(groups.values());
+  return Array.from(groups.values()).map((group) => ({
+    ...group,
+    tickets: [...group.tickets].sort((a, b) =>
+      b.createdAt.split("/").reverse().join("").localeCompare(
+        a.createdAt.split("/").reverse().join(""),
+      ),
+    ),
+  }));
 }
 
 function sharedValue(group: PersonGroup, field: keyof Ticket) {
@@ -351,10 +417,8 @@ export default function App() {
   const [selectedCalendarDate, setSelectedCalendarDate] =
     useState("2026-09-22");
   const [page, setPage] = useState(1);
-  const [ticketPages, setTicketPages] = useState<Record<string, number>>({});
   const [isRefreshing, setIsRefreshing] = useState(false);
   const pageSize = 4;
-  const ticketPageSize = 5;
 
   useEffect(() => {
     document.documentElement.style.overflow = selected ? "hidden" : "";
@@ -515,7 +579,8 @@ export default function App() {
           </div>
           <div className="topbar-actions">
             <button className="icon-button" aria-label="Thông báo">
-              <span className="notification-dot" />♢
+              <span className="notification-dot" />
+              <Icon name="bell" size={17} />
             </button>
             <div className="avatar small">QT</div>
           </div>
@@ -525,17 +590,17 @@ export default function App() {
           <section className="page-heading">
             <div>
               <h1>Quản lý cá nhân</h1>
-              <p>Quản lý hồ sơ cá nhân và các phiếu làm việc theo CCCD</p>
+              <p>Quản lý danh sách hồ sơ cá nhân và các phiếu đăng ký làm việc theo số định danh CCCD</p>
             </div>
             <div className="heading-actions">
               <button className="button secondary" onClick={refresh}>
                 <span className={isRefreshing ? "spin" : ""}>
-                  <Icon name="refresh" />
+                  <Icon name="refresh" size={17} />
                 </span>
                 Làm mới
               </button>
               <button className="button primary" onClick={exportCsv}>
-                <Icon name="download" />
+                <Icon name="download" size={17} />
                 Xuất dữ liệu
               </button>
             </div>
@@ -544,20 +609,20 @@ export default function App() {
           <section className="stat-grid">
             <div className="stat-card">
               <div className="stat-icon blue">
-                <Icon name="users" size={22} />
+                <Icon name="users" size={24} />
               </div>
-              <div>
-                <span>Tổng số cá nhân</span>
+              <div className="stat-meta">
+                <span>TỔNG SỐ CÁ NHÂN</span>
                 <strong>{groupTickets(tickets).length}</strong>
-                <small>Được gom nhóm theo CCCD</small>
+                <small>Được gom nhóm theo số CCCD</small>
               </div>
             </div>
             <div className="stat-card">
               <div className="stat-icon violet">
-                <Icon name="ticket" size={22} />
+                <Icon name="ticket" size={24} />
               </div>
-              <div>
-                <span>Tổng số phiếu</span>
+              <div className="stat-meta">
+                <span>TỔNG SỐ PHIẾU</span>
                 <strong>{tickets.length}</strong>
                 <small>
                   {tickets.filter((item) => item.status === "active").length}{" "}
@@ -567,20 +632,22 @@ export default function App() {
             </div>
             <div className="stat-card">
               <div className="stat-icon amber">
-                <Icon name="filter" size={22} />
+                <Icon name="filter" size={24} />
               </div>
-              <div>
-                <span>Kết quả hiển thị</span>
+              <div className="stat-meta">
+                <span>KẾT QUẢ HIỂN THỊ</span>
                 <strong>{groups.length}</strong>
-                <small>{filteredTickets.length} phiếu phù hợp</small>
+                <small>{filteredTickets.length} phiếu làm việc phù hợp</small>
               </div>
             </div>
           </section>
 
           <section className="filter-card">
             <div className="filter-heading">
-              <div>
-                <Icon name="filter" />
+              <div className="filter-title">
+                <div className="filter-icon-pill">
+                  <Icon name="filter" size={16} />
+                </div>
                 <strong>Bộ lọc tìm kiếm</strong>
               </div>
               {(query || type || status || dateFrom || dateTo) && (
@@ -594,7 +661,7 @@ export default function App() {
               <label className="search-field">
                 <span>Tìm kiếm</span>
                 <div>
-                  <Icon name="search" />
+                  <Icon name="search" size={17} />
                   <input
                     value={query}
                     onChange={(event) => {
@@ -666,10 +733,10 @@ export default function App() {
 
           <section className="results-card">
             <div className="results-toolbar">
-              <div>
+              <div className="results-toolbar-title">
                 <strong>Danh sách cá nhân</strong>
                 <span>
-                  {groups.length} cá nhân · {filteredTickets.length} phiếu
+                  Hiển thị <b>{groups.length}</b> cá nhân · <b>{filteredTickets.length}</b> phiếu làm việc
                 </span>
               </div>
             </div>
@@ -679,28 +746,34 @@ export default function App() {
             {visibleGroups.length ? (
               <div className="group-list">
                 <div className="parent-table-header">
-                  <span />
-                  <span>HỌ VÀ TÊN</span>
-                  <span>CCCD</span>
-                  <span>SỐ ĐIỆN THOẠI</span>
-                  <span>ĐƠN VỊ CÔNG TÁC</span>
-                  <span>ĐƠN VỊ LIÊN LẠC</span>
-                  <span>THAO TÁC</span>
+                  <span className="col-header col-expand" />
+                  <div className="col-header col-name">
+                    <Icon name="user" size={15} />
+                    <span>HỌ VÀ TÊN</span>
+                  </div>
+                  <div className="col-header col-cccd">
+                    <Icon name="idCard" size={15} />
+                    <span>SỐ CCCD</span>
+                  </div>
+                  <div className="col-header col-phone">
+                    <Icon name="phone" size={15} />
+                    <span>SỐ ĐIỆN THOẠI</span>
+                  </div>
+                  <div className="col-header col-org">
+                    <Icon name="building" size={15} />
+                    <span>ĐƠN VỊ CÔNG TÁC</span>
+                  </div>
+                  <div className="col-header col-unit">
+                    <Icon name="building2" size={15} />
+                    <span>ĐƠN VỊ LIÊN LẠC</span>
+                  </div>
+                  <div className="col-header col-action">
+                    <Icon name="gear" size={15} />
+                    <span>THAO TÁC</span>
+                  </div>
                 </div>
                 {visibleGroups.map((group) => {
                   const isOpen = expanded.has(group.key);
-                  const ticketPagesCount = Math.max(
-                    1,
-                    Math.ceil(group.tickets.length / ticketPageSize),
-                  );
-                  const ticketPage = Math.min(
-                    ticketPages[group.key] || 1,
-                    ticketPagesCount,
-                  );
-                  const visibleTickets = group.tickets.slice(
-                    (ticketPage - 1) * ticketPageSize,
-                    ticketPage * ticketPageSize,
-                  );
                   const name = sharedValue(group, "fullName");
                   const phone = sharedValue(group, "phone");
                   const organization = sharedValue(group, "organization");
@@ -714,73 +787,133 @@ export default function App() {
                         className="parent-row"
                         onClick={() => toggleGroup(group.key)}
                       >
-                        <button
-                          className="chevron-button"
-                          aria-label={isOpen ? "Thu gọn nhóm" : "Mở rộng nhóm"}
-                          aria-expanded={isOpen}
-                        >
-                          <Icon name="chevron" />
-                        </button>
+                        <div className="cell-expand">
+                          <button
+                            className="chevron-button"
+                            aria-label={isOpen ? "Thu gọn nhóm" : "Mở rộng nhóm"}
+                            aria-expanded={isOpen}
+                          >
+                            <Icon name="chevron" size={18} />
+                          </button>
+                        </div>
                         <div className="person-cell">
                           <div className="avatar">
                             {initials(group.tickets[0].fullName)}
                           </div>
-                          <div>
+                          <div className="person-meta">
                             <strong>{name.value}</strong>
                             <span>{group.tickets.length} phiếu làm việc</span>
                           </div>
                         </div>
-                        <code>{group.citizenId || "Chưa có CCCD"}</code>
-                        <span>{phone.value}</span>
-                        <span
-                          className={organization.conflict ? "conflict" : ""}
-                        >
-                          {organization.value}
-                        </span>
-                        <span
-                          className={contactUnit.conflict ? "conflict" : ""}
-                        >
-                          {contactUnit.value}
-                        </span>
-                        <button
-                          className="view-button"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            openTicket(group.tickets[0]);
-                          }}
-                        >
-                          <Icon name="eye" size={17} />
-                          Hồ sơ
-                        </button>
+                        <div className="cell-cccd">
+                          <code className={`cccd-badge ${!group.citizenId ? "empty" : ""}`}>
+                            {group.citizenId || "Chưa có CCCD"}
+                          </code>
+                        </div>
+                        <div className="cell-phone">
+                          <span className="phone-text">{phone.value}</span>
+                        </div>
+                        <div className="cell-org">
+                          {organization.conflict ? (
+                            <span className="conflict-badge" title={organization.value}>
+                              <Icon name="alert" size={14} />
+                              <span>Nhiều đơn vị</span>
+                            </span>
+                          ) : (
+                            <span className="unit-text">{organization.value}</span>
+                          )}
+                        </div>
+                        <div className="cell-unit">
+                          {contactUnit.conflict ? (
+                            <span className="conflict-badge" title={contactUnit.value}>
+                              <Icon name="alert" size={14} />
+                              <span>Nhiều phòng ban</span>
+                            </span>
+                          ) : (
+                            <span className="unit-text">{contactUnit.value}</span>
+                          )}
+                        </div>
+                        <div className="cell-action">
+                          <button
+                            className="view-button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              openTicket(group.tickets[0]);
+                            }}
+                          >
+                            <Icon name="eye" size={16} />
+                            <span>Hồ sơ</span>
+                          </button>
+                        </div>
                       </div>
 
                       {isOpen && (
                         <div className="ticket-panel">
                           <div className="ticket-panel-heading">
                             <div>
-                              <Icon name="ticket" />
-                              <strong>Phiếu làm việc</strong>
-                              <span>{group.tickets.length}</span>
+                              <Icon name="ticket" size={18} />
+                              <strong>Danh sách phiếu làm việc</strong>
+                              <span className="ticket-count-badge">{group.tickets.length}</span>
                             </div>
-                            <small>Mỗi dòng là một bản ghi độc lập</small>
+                            <small>Mỗi dòng là một bản ghi phiếu độc lập</small>
                           </div>
                           <div className="ticket-table-wrap">
                             <table>
                               <thead>
                                 <tr>
-                                  <th>MÃ PHIẾU</th>
-                                  <th>ẢNH</th>
-                                  <th>HỌ VÀ TÊN</th>
-                                  <th>LOẠI</th>
-                                  <th>MÃ NV</th>
-                                  <th>PHƯƠNG TIỆN</th>
-                                  <th>TRẠNG THÁI / HIỆU LỰC</th>
-                                  <th>NGÀY TẠO</th>
-                                  <th />
+                                  <th>
+                                    <div className="th-inner">
+                                      <Icon name="ticket" size={14} />
+                                      <span>MÃ PHIẾU</span>
+                                    </div>
+                                  </th>
+                                  <th>
+                                    <div className="th-inner">
+                                      <span>ẢNH</span>
+                                    </div>
+                                  </th>
+                                  <th>
+                                    <div className="th-inner">
+                                      <Icon name="user" size={14} />
+                                      <span>HỌ VÀ TÊN</span>
+                                    </div>
+                                  </th>
+                                  <th>
+                                    <div className="th-inner">
+                                      <span>LOẠI</span>
+                                    </div>
+                                  </th>
+                                  <th>
+                                    <div className="th-inner">
+                                      <span>MÃ NV</span>
+                                    </div>
+                                  </th>
+                                  <th>
+                                    <div className="th-inner">
+                                      <Icon name="car" size={14} />
+                                      <span>PHƯƠNG TIỆN</span>
+                                    </div>
+                                  </th>
+                                  <th>
+                                    <div className="th-inner">
+                                      <span>TRẠNG THÁI / HIỆU LỰC</span>
+                                    </div>
+                                  </th>
+                                  <th>
+                                    <div className="th-inner">
+                                      <Icon name="calendar" size={14} />
+                                      <span>NGÀY TẠO</span>
+                                    </div>
+                                  </th>
+                                  <th>
+                                    <div className="th-inner">
+                                      <span>THAO TÁC</span>
+                                    </div>
+                                  </th>
                                 </tr>
                               </thead>
                               <tbody>
-                                {visibleTickets.map((ticket) => (
+                                {group.tickets.map((ticket) => (
                                   <tr key={ticket.id}>
                                     <td>
                                       <button
@@ -807,14 +940,16 @@ export default function App() {
                                         {ticket.type}
                                       </span>
                                     </td>
-                                    <td>{ticket.officerCode || "—"}</td>
+                                    <td>
+                                      <span className="officer-code">{ticket.officerCode || "—"}</span>
+                                    </td>
                                     <td>
                                       {ticket.vehicle ? (
                                         <code className="plate">
                                           {ticket.vehicle}
                                         </code>
                                       ) : (
-                                        "—"
+                                        <span className="text-muted">—</span>
                                       )}
                                     </td>
                                     <td>
@@ -824,16 +959,19 @@ export default function App() {
                                         <i />
                                         {statusLabel[ticket.status]}
                                       </span>
-                                      <small>Đến {ticket.validTo}</small>
+                                      <small className="valid-to-text">Đến {ticket.validTo}</small>
                                     </td>
-                                    <td>{ticket.createdAt}</td>
+                                    <td>
+                                      <span className="date-created">{ticket.createdAt}</span>
+                                    </td>
                                     <td>
                                       <button
                                         className="icon-button table-action"
                                         onClick={() => openTicket(ticket)}
                                         aria-label={`Xem ${ticket.ticketId}`}
+                                        title={`Xem chi tiết ${ticket.ticketId}`}
                                       >
-                                        <Icon name="eye" />
+                                        <Icon name="eye" size={16} />
                                       </button>
                                     </td>
                                   </tr>
@@ -841,64 +979,6 @@ export default function App() {
                               </tbody>
                             </table>
                           </div>
-                          {ticketPagesCount > 1 && (
-                            <div className="pagination ticket-pagination">
-                              <span>
-                                Hiển thị {(ticketPage - 1) * ticketPageSize + 1}
-                                –
-                                {Math.min(
-                                  ticketPage * ticketPageSize,
-                                  group.tickets.length,
-                                )}{" "}
-                                / {group.tickets.length} phiếu
-                              </span>
-                              <div>
-                                <button
-                                  aria-label="Trang phiếu trước"
-                                  disabled={ticketPage === 1}
-                                  onClick={() =>
-                                    setTicketPages((current) => ({
-                                      ...current,
-                                      [group.key]: ticketPage - 1,
-                                    }))
-                                  }
-                                >
-                                  ‹
-                                </button>
-                                {Array.from(
-                                  { length: ticketPagesCount },
-                                  (_, index) => index + 1,
-                                ).map((value) => (
-                                  <button
-                                    className={
-                                      value === ticketPage ? "current" : ""
-                                    }
-                                    key={value}
-                                    onClick={() =>
-                                      setTicketPages((current) => ({
-                                        ...current,
-                                        [group.key]: value,
-                                      }))
-                                    }
-                                  >
-                                    {value}
-                                  </button>
-                                ))}
-                                <button
-                                  aria-label="Trang phiếu sau"
-                                  disabled={ticketPage === ticketPagesCount}
-                                  onClick={() =>
-                                    setTicketPages((current) => ({
-                                      ...current,
-                                      [group.key]: ticketPage + 1,
-                                    }))
-                                  }
-                                >
-                                  ›
-                                </button>
-                              </div>
-                            </div>
-                          )}
                         </div>
                       )}
                     </article>
@@ -971,51 +1051,6 @@ export default function App() {
               </div>
             </div>
 
-            <section className="profile-summary" aria-label="Tóm tắt truy cập">
-              <article className="summary-tile summary-access">
-                <span className="summary-icon">↗</span>
-                <div>
-                  <small>PHIẾU TRONG NGÀY</small>
-                  <strong>{selectedDayTickets.length} phiếu</strong>
-                  <span>{formatCalendarDate(selectedCalendarDate)}</span>
-                </div>
-              </article>
-              <article className="summary-tile summary-zones">
-                <span className="summary-icon">⌖</span>
-                <div>
-                  <small>PHIẾU CÒN HIỆU LỰC</small>
-                  <strong>
-                    {
-                      selectedDayTickets.filter(
-                        (ticket) => ticket.status === "active",
-                      ).length
-                    }{" "}
-                    phiếu
-                  </strong>
-                  <span>
-                    {
-                      selectedDayTickets.filter(
-                        (ticket) => ticket.status !== "active",
-                      ).length
-                    }{" "}
-                    phiếu hết hạn hoặc ngừng
-                  </span>
-                </div>
-              </article>
-              <article className="summary-tile summary-latest">
-                <span className="summary-icon">◷</span>
-                <div>
-                  <small>NGÀY ĐANG CHỌN</small>
-                  <strong>{formatCalendarDate(selectedCalendarDate)}</strong>
-                  <span>
-                    {selectedDayTickets.length
-                      ? `Đang áp dụng ${selectedDayTickets.length} phiếu đăng ký`
-                      : "Không có phiếu đăng ký trong ngày"}
-                  </span>
-                </div>
-              </article>
-            </section>
-
             <div className="detail-layout">
               <aside className="profile-card">
                 <div className="profile-identity">
@@ -1077,8 +1112,10 @@ export default function App() {
               <div className="detail-main-column">
                 <section className="detail-card registration-card">
                   <div className="detail-card-title">
-                    <div>
-                      <Icon name="ticket" size={20} />
+                    <div className="title-with-icon">
+                      <div className="card-title-icon">
+                        <Icon name="ticket" size={20} />
+                      </div>
                       <strong>Lịch đăng ký của cá nhân</strong>
                     </div>
                     <span className="ticket-context">
@@ -1088,13 +1125,14 @@ export default function App() {
 
                   <div className="detail-card-content">
                     <div className="detail-section-label">
-                      <span>◷</span>
-                      LỊCH RA VÀO
+                      <Icon name="calendar" size={16} />
+                      <span>LỊCH RA VÀO THEO THÁNG</span>
                     </div>
                     <div className="calendar-schedule-layout">
                       <div className="access-calendar">
                         <div className="calendar-toolbar">
                           <button
+                            className="cal-nav-btn"
                             aria-label="Tháng trước"
                             onClick={() => changeCalendarMonth(-1)}
                           >
@@ -1113,6 +1151,7 @@ export default function App() {
                             }}
                           />
                           <button
+                            className="cal-nav-btn"
                             aria-label="Tháng sau"
                             onClick={() => changeCalendarMonth(1)}
                           >
@@ -1122,7 +1161,9 @@ export default function App() {
                         <div className="calendar-weekdays">
                           {["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map(
                             (day) => (
-                              <span key={day}>{day}</span>
+                              <span key={day} className={day === "T7" || day === "CN" ? "weekend" : ""}>
+                                {day}
+                              </span>
                             ),
                           )}
                         </div>
@@ -1132,6 +1173,7 @@ export default function App() {
                               <button
                                 key={date}
                                 className={[
+                                  "cal-day-btn",
                                   date === selectedCalendarDate
                                     ? "selected"
                                     : "",
@@ -1146,17 +1188,17 @@ export default function App() {
                                     : ""
                                 }`}
                               >
-                                <span>{Number(date.slice(-2))}</span>
+                                <span className="day-number">{Number(date.slice(-2))}</span>
                                 {ticketsByAccessDate.has(date) && (
-                                  <i>
-                                    <b />
+                                  <span className="day-badge-dot">
+                                    <span className="dot" />
                                     {(ticketsByAccessDate.get(date)?.length ||
                                       0) > 1 && (
-                                      <em>
+                                      <span className="count-pill">
                                         {ticketsByAccessDate.get(date)?.length}
-                                      </em>
+                                      </span>
                                     )}
-                                  </i>
+                                  </span>
                                 )}
                               </button>
                             ) : (
@@ -1168,31 +1210,34 @@ export default function App() {
                           )}
                         </div>
                         <div className="calendar-legend">
-                          <span>
-                            <i /> Ngày có phiếu
-                          </span>
-                          <small>Chọn ngày để xem toàn bộ phiếu</small>
+                          <div className="legend-indicator">
+                            <span className="dot-active" />
+                            <span>Ngày có phiếu</span>
+                          </div>
+                          <small>Chọn ngày để xem chi tiết phiếu</small>
                         </div>
                       </div>
 
                       <div className="day-ticket-panel">
                         <div className="day-ticket-heading">
                           <div>
-                            <span>PHIẾU TRONG NGÀY</span>
-                            <strong>
+                            <span className="sub-title">CHI TIẾT PHIẾU TRONG NGÀY</span>
+                            <strong className="main-date">
                               {formatCalendarDate(selectedCalendarDate)}
                             </strong>
                           </div>
-                          <b>{selectedDayTickets.length}</b>
+                          <div className="day-count-badge">
+                            <b>{selectedDayTickets.length}</b> phiếu
+                          </div>
                         </div>
                         {selectedDayTickets.length ? (
                           <div className="day-ticket-list">
                             {selectedDayTickets.map((ticket, index) => (
                               <button
                                 key={ticket.id}
-                                className={
+                                className={`day-ticket-item ${
                                   ticket.id === selected.id ? "current" : ""
-                                }
+                                }`}
                                 onClick={() => setSelected(ticket)}
                               >
                                 <div className="day-ticket-topline">
@@ -1200,27 +1245,63 @@ export default function App() {
                                     <i />
                                     {statusLabel[ticket.status]}
                                   </span>
-                                  {ticket.id === selected.id && (
-                                    <em>Đang xem</em>
+                                  {ticket.id === selected.id ? (
+                                    <span className="viewing-pill">Đang xem</span>
+                                  ) : (
+                                    <span className="click-view-hint">Xem chi tiết</span>
                                   )}
                                 </div>
-                                <strong>{ticket.ticketId}</strong>
-                                <span>
-                                  {index % 2 === 0
-                                    ? "08:00 – 11:30 · 13:30 – 17:00"
-                                    : "09:00 – 12:00 · 14:00 – 16:30"}
-                                </span>
-                                <small>
-                                  {ticket.contactUnit} · {ticket.officerCode}
-                                </small>
+                                <div className="day-ticket-body">
+                                  <div className="ticket-id-row">
+                                    <Icon name="ticket" size={16} />
+                                    <strong>{ticket.ticketId}</strong>
+                                  </div>
+                                  <div className="ticket-time-row">
+                                    <span>🕒</span>
+                                    <span>
+                                      {index % 2 === 0
+                                        ? "08:00 – 11:30 · 13:30 – 17:00"
+                                        : "09:00 – 12:00 · 14:00 – 16:30"}
+                                    </span>
+                                  </div>
+                                  <div className="ticket-unit-row">
+                                    <span>🏢</span>
+                                    <small>
+                                      {ticket.contactUnit} · Mã NV: <b>{ticket.officerCode}</b>
+                                    </small>
+                                  </div>
+                                </div>
                               </button>
                             ))}
                           </div>
                         ) : (
                           <div className="day-ticket-empty">
-                            <span>○</span>
+                            <div className="day-ticket-empty-icon">
+                              <Icon name="calendar" size={32} />
+                            </div>
                             <strong>Không có phiếu trong ngày</strong>
-                            <small>Hãy chọn ngày có chấm đỏ trên lịch.</small>
+                            <p>
+                              Ngày <b>{formatCalendarDate(selectedCalendarDate)}</b> không có lịch làm việc đăng ký.
+                            </p>
+                            <div className="empty-hint">
+                              <span className="dot-hint" />
+                              <span>Hãy chọn các ngày có chấm xanh trên lịch</span>
+                            </div>
+                            {ticketsByAccessDate.size > 0 && (
+                              <button
+                                className="btn-select-active-date"
+                                onClick={() => {
+                                  const dates = Array.from(ticketsByAccessDate.keys()).sort();
+                                  if (dates[0]) {
+                                    setSelectedCalendarDate(dates[0]);
+                                    setCalendarMonth(dates[0].slice(0, 7));
+                                  }
+                                }}
+                              >
+                                <Icon name="ticket" size={15} />
+                                Chuyển đến ngày có phiếu ({formatCalendarDate(Array.from(ticketsByAccessDate.keys()).sort()[0])})
+                              </button>
+                            )}
                           </div>
                         )}
                       </div>
