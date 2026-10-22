@@ -42,7 +42,31 @@ const tickets: Ticket[] = [
     status: "active",
     validTo: "25/09/2026",
     createdAt: "22/07/2026",
-    accessDates: ["2026-07-22","2026-07-23","2026-07-28","2026-07-30","2026-08-01","2026-08-04","2026-08-06","2026-08-11","2026-08-13","2026-08-18","2026-08-20","2026-08-25","2026-08-27","2026-09-01","2026-09-03","2026-09-08","2026-09-10","2026-09-15","2026-09-17","2026-09-22","2026-09-23","2026-09-24","2026-09-25"],
+    accessDates: [
+      "2026-07-22",
+      "2026-07-23",
+      "2026-07-28",
+      "2026-07-30",
+      "2026-08-01",
+      "2026-08-04",
+      "2026-08-06",
+      "2026-08-11",
+      "2026-08-13",
+      "2026-08-18",
+      "2026-08-20",
+      "2026-08-25",
+      "2026-08-27",
+      "2026-09-01",
+      "2026-09-03",
+      "2026-09-08",
+      "2026-09-10",
+      "2026-09-15",
+      "2026-09-17",
+      "2026-09-22",
+      "2026-09-23",
+      "2026-09-24",
+      "2026-09-25",
+    ],
   },
   {
     id: "rec-0052",
@@ -199,6 +223,26 @@ const tickets: Ticket[] = [
     accessDates: ["2026-09-01", "2026-09-03"],
   },
   {
+    id: "rec-0092",
+    personId: "person-linh",
+    ticketId: "TICKET-20261022-0092",
+    fullName: "Hoàng Bảo Linh",
+    citizenId: "900000123478",
+    phone: "0912 345 678",
+    organization: "Công ty TNHH Kỹ Thuật Việt",
+    contactUnit: "Phòng Quản trị hệ thống",
+    type: "Khách bộ ngành",
+    officerCode: "NV045",
+    vehicle: "30F-67890",
+    status: "active",
+    validTo: "31/10/2026",
+    createdAt: "22/10/2026",
+    accessDates: Array.from(
+      { length: 10 },
+      (_, index) => `2026-10-${String(22 + index).padStart(2, "0")}`,
+    ),
+  },
+  {
     id: "rec-0091",
     personId: "person-one-day",
     ticketId: "TICKET-20261022-0091",
@@ -215,13 +259,17 @@ const tickets: Ticket[] = [
     createdAt: "22/10/2026",
     accessDates: ["2026-10-22"],
   },
-].map((ticket): Ticket =>
-  ticket.personId === "person-linh"
-    ? ({
-        ...ticket,
-        accessDates: Array.from(new Set([...ticket.accessDates, "2026-09-22"])),
-      } as Ticket)
-    : (ticket as Ticket),
+].map(
+  (ticket): Ticket =>
+    ticket.personId === "person-linh"
+      ? ({
+          ...ticket,
+          accessDates:
+            ticket.id === "rec-0092"
+              ? ticket.accessDates
+              : Array.from(new Set([...ticket.accessDates, "2026-09-22"])),
+        } as Ticket)
+      : (ticket as Ticket),
 );
 
 const icons = {
@@ -380,9 +428,11 @@ function groupTickets(items: Ticket[]): PersonGroup[] {
   return Array.from(groups.values()).map((group) => ({
     ...group,
     tickets: [...group.tickets].sort((a, b) =>
-      b.createdAt.split("/").reverse().join("").localeCompare(
-        a.createdAt.split("/").reverse().join(""),
-      ),
+      b.createdAt
+        .split("/")
+        .reverse()
+        .join("")
+        .localeCompare(a.createdAt.split("/").reverse().join("")),
     ),
   }));
 }
@@ -420,6 +470,23 @@ const statusLabel: Record<TicketStatus, string> = {
   inactive: "Không hoạt động",
 };
 
+const ticketCages = [
+  ["CAGE-A", "Lồng rack số 1"],
+  ["CAGE-B", "Lồng rack số 2"],
+  ["CAGE-C", "Lồng rack số 3"],
+  ["CAGE-D", "Lồng rack số 4"],
+  ["CAGE-E", "Lồng rack số 5"],
+  ["CAGE-F", "Lồng rack số 6"],
+];
+const ticketRacks = [
+  ["RACK-601", "Rack Server Đơn 01"],
+  ["RACK-603", "Rack Server Đơn 03"],
+  ["RACK-602", "Rack Server Đơn 02"],
+  ["RACK-604", "Rack Server Đơn 04"],
+  ["RACK-605", "Rack Database 01"],
+  ["RACK-606", "Rack Database 02"],
+];
+
 export default function App() {
   const [query, setQuery] = useState("");
   const [type, setType] = useState("");
@@ -431,12 +498,25 @@ export default function App() {
   );
   const [selected, setSelected] = useState<Ticket | null>(null);
   const [detailMode, setDetailMode] = useState<"person" | "ticket">("person");
-  const [expandedTicketIds, setExpandedTicketIds] = useState<Set<string>>(new Set());
+  const [expandedTicketIds, setExpandedTicketIds] = useState<Set<string>>(
+    new Set(),
+  );
   const [calendarMonth, setCalendarMonth] = useState("2026-09");
-  const [selectedCalendarDate, setSelectedCalendarDate] = useState("2026-09-22");
+  const [selectedCalendarDate, setSelectedCalendarDate] =
+    useState("2026-09-22");
   const [page, setPage] = useState(1);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showAllScheduleDates, setShowAllScheduleDates] = useState(false);
+  const [showSchedulePopup, setShowSchedulePopup] = useState(false);
+  const [showScheduleRangePicker, setShowScheduleRangePicker] = useState(false);
+  const [scheduleDateRange, setScheduleDateRange] = useState<{
+    from: string | null;
+    to: string | null;
+  }>({ from: null, to: null });
+  const [scheduleRangeMonth, setScheduleRangeMonth] = useState("2026-10");
+  const [showResourcePopup, setShowResourcePopup] = useState<
+    "cage" | "rack" | null
+  >(null);
   const pageSize = 4;
 
   useEffect(() => {
@@ -485,9 +565,11 @@ export default function App() {
         ? tickets
             .filter((ticket) => ticket.personId === selected.personId)
             .sort((a, b) =>
-              b.createdAt.split("/").reverse().join("-").localeCompare(
-                a.createdAt.split("/").reverse().join("-"),
-              ),
+              b.createdAt
+                .split("/")
+                .reverse()
+                .join("-")
+                .localeCompare(a.createdAt.split("/").reverse().join("-")),
             )
         : [],
     [selected],
@@ -501,20 +583,46 @@ export default function App() {
         { plate: "51A-12345", type: "Car", createdAt: "05/08/2026" },
       ];
     }
-    const byPlate = new Map<string, { plate: string; type: string; createdAt: string }>();
+    const byPlate = new Map<
+      string,
+      { plate: string; type: string; createdAt: string }
+    >();
     selectedPersonTickets.forEach((ticket) => {
       if (ticket.vehicle && !byPlate.has(ticket.vehicle)) {
-        byPlate.set(ticket.vehicle, { plate: ticket.vehicle, type: "—", createdAt: ticket.createdAt });
+        byPlate.set(ticket.vehicle, {
+          plate: ticket.vehicle,
+          type: "—",
+          createdAt: ticket.createdAt,
+        });
       }
     });
     return Array.from(byPlate.values());
   }, [selected, selectedPersonTickets]);
 
-  const profileExtras = selected?.personId === "person-linh"
-    ? { gender: "Nữ", birthDate: "12/05/1988", purpose: "Bảo trì hệ thống mạng", note: "Liên hệ cán bộ phụ trách khi đến", registeredAt: "21/07/2026" }
-    : selected?.personId === "person-one-day"
-      ? { gender: "Nam", birthDate: "10/08/1994", purpose: "Bảo trì thiết bị mạng", note: "Liên hệ anh Bảo trước khi vào khu vực làm việc", registeredAt: "22/10/2026" }
-    : { gender: "Chưa cập nhật", birthDate: "Chưa cập nhật", purpose: "Chưa cập nhật", note: "Chưa có ghi chú", registeredAt: "Chưa cập nhật" };
+  const profileExtras =
+    selected?.personId === "person-linh"
+      ? {
+          gender: "Nữ",
+          birthDate: "12/05/1988",
+          purpose: "Bảo trì hệ thống mạng",
+          note: "Liên hệ cán bộ phụ trách khi đến",
+          registeredAt: "21/07/2026",
+        }
+      : selected?.personId === "person-one-day"
+        ? {
+            gender: "Nam",
+            birthDate: "10/08/1994",
+            purpose: "Bảo trì thiết bị mạng",
+            note: "Liên hệ anh Bảo trước khi vào khu vực làm việc",
+            registeredAt: "22/10/2026",
+          }
+        : {
+            gender: "Chưa cập nhật",
+            birthDate: "Chưa cập nhật",
+            purpose: "Chưa cập nhật",
+            note: "Chưa có ghi chú",
+            registeredAt: "Chưa cập nhật",
+          };
 
   const personAccessHistory = useMemo(
     () =>
@@ -528,42 +636,89 @@ export default function App() {
 
   const ticketsByAccessDate = useMemo(() => {
     const grouped = new Map<string, Ticket[]>();
-    selectedPersonTickets.forEach((ticket) => ticket.accessDates.forEach((date) => {
-      grouped.set(date, [...(grouped.get(date) || []), ticket]);
-    }));
+    selectedPersonTickets.forEach((ticket) =>
+      ticket.accessDates.forEach((date) => {
+        grouped.set(date, [...(grouped.get(date) || []), ticket]);
+      }),
+    );
     return grouped;
   }, [selectedPersonTickets]);
-  const selectedDayTickets = ticketsByAccessDate.get(selectedCalendarDate) || [];
+  const selectedDayTickets =
+    ticketsByAccessDate.get(selectedCalendarDate) || [];
   const calendarDays = useMemo(() => {
     const [year, month] = calendarMonth.split("-").map(Number);
     const mondayOffset = (new Date(year, month - 1, 1).getDay() + 6) % 7;
     const totalDays = new Date(year, month, 0).getDate();
     return [
       ...Array.from({ length: mondayOffset }, () => null),
-      ...Array.from({ length: totalDays }, (_, index) => `${year}-${String(month).padStart(2, "0")}-${String(index + 1).padStart(2, "0")}`),
+      ...Array.from(
+        { length: totalDays },
+        (_, index) =>
+          `${year}-${String(month).padStart(2, "0")}-${String(index + 1).padStart(2, "0")}`,
+      ),
     ];
   }, [calendarMonth]);
+  const scheduleRangeCalendarDays = useMemo(() => {
+    const [year, month] = scheduleRangeMonth.split("-").map(Number);
+    const mondayOffset = (new Date(year, month - 1, 1).getDay() + 6) % 7;
+    const totalDays = new Date(year, month, 0).getDate();
+    return [
+      ...Array.from({ length: mondayOffset }, () => null),
+      ...Array.from(
+        { length: totalDays },
+        (_, index) =>
+          `${year}-${String(month).padStart(2, "0")}-${String(index + 1).padStart(2, "0")}`,
+      ),
+    ];
+  }, [scheduleRangeMonth]);
 
   function openTicket(ticket: Ticket) {
     setSelected(ticket);
     setDetailMode("ticket");
     setExpandedTicketIds(new Set([ticket.id]));
     setShowAllScheduleDates(false);
+    setShowSchedulePopup(false);
+    setShowScheduleRangePicker(false);
+    setShowResourcePopup(null);
+    setScheduleDateRange({ from: null, to: null });
     const firstAccessDate = ticket.accessDates[0] || "2026-09-01";
     setSelectedCalendarDate(firstAccessDate);
     setCalendarMonth(firstAccessDate.slice(0, 7));
+    setScheduleRangeMonth(firstAccessDate.slice(0, 7));
   }
 
   function openPersonProfile(ticket: Ticket) {
     setSelected(ticket);
-    setDetailMode("person");
-    setExpandedTicketIds(new Set());
+    setDetailMode("ticket");
+    setExpandedTicketIds(new Set([ticket.id]));
+    setShowAllScheduleDates(false);
+    setShowSchedulePopup(false);
+    setShowScheduleRangePicker(false);
+    setShowResourcePopup(null);
+    setScheduleDateRange({ from: null, to: null });
+    const firstAccessDate = ticket.accessDates[0] || "2026-09-01";
+    setSelectedCalendarDate(firstAccessDate);
+    setCalendarMonth(firstAccessDate.slice(0, 7));
+    setScheduleRangeMonth(firstAccessDate.slice(0, 7));
+  }
+
+  function chooseScheduleRangeDate(date: string) {
+    if (!scheduleDateRange.from || scheduleDateRange.to) {
+      setScheduleDateRange({ from: date, to: null });
+      return;
+    }
+    if (date < scheduleDateRange.from)
+      setScheduleDateRange({ from: date, to: null });
+    else setScheduleDateRange({ from: scheduleDateRange.from, to: date });
+    setShowScheduleRangePicker(false);
   }
 
   function changeCalendarMonth(offset: number) {
     const [year, month] = calendarMonth.split("-").map(Number);
     const next = new Date(year, month - 1 + offset, 1);
-    setCalendarMonth(`${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, "0")}`);
+    setCalendarMonth(
+      `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, "0")}`,
+    );
   }
 
   function toggleGroup(key: string) {
@@ -624,6 +779,28 @@ export default function App() {
     URL.revokeObjectURL(link.href);
   }
 
+  function renderScheduleDate(ticket: Ticket, date: string) {
+    return (
+      <article className="ticket-registration-day" key={date}>
+        <div className="ticket-registration-date">
+          <Icon name="calendar" size={15} />
+          <strong>{formatCalendarDate(date)}</strong>
+        </div>
+        <div className="ticket-registration-time-control">
+          <div className="ticket-time-summary">
+            <span className="ticket-time-summary-icon" aria-hidden="true">
+              ◷
+            </span>
+            <span>Từ</span>
+            <strong>08:00</strong>
+            <span>đến</span>
+            <strong>24:00</strong>
+          </div>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <div className="app-shell">
       <main>
@@ -646,7 +823,10 @@ export default function App() {
           <section className="page-heading">
             <div>
               <h1>Quản lý cá nhân</h1>
-              <p>Quản lý danh sách hồ sơ cá nhân và các phiếu đăng ký làm việc theo số định danh CCCD</p>
+              <p>
+                Quản lý danh sách hồ sơ cá nhân và các phiếu đăng ký làm việc
+                theo số định danh CCCD
+              </p>
             </div>
             <div className="heading-actions">
               <button className="button secondary" onClick={refresh}>
@@ -792,7 +972,8 @@ export default function App() {
               <div className="results-toolbar-title">
                 <strong>Danh sách cá nhân</strong>
                 <span>
-                  Hiển thị <b>{groups.length}</b> cá nhân · <b>{filteredTickets.length}</b> phiếu làm việc
+                  Hiển thị <b>{groups.length}</b> cá nhân ·{" "}
+                  <b>{filteredTickets.length}</b> phiếu làm việc
                 </span>
               </div>
             </div>
@@ -846,7 +1027,9 @@ export default function App() {
                         <div className="cell-expand">
                           <button
                             className="chevron-button"
-                            aria-label={isOpen ? "Thu gọn nhóm" : "Mở rộng nhóm"}
+                            aria-label={
+                              isOpen ? "Thu gọn nhóm" : "Mở rộng nhóm"
+                            }
                             aria-expanded={isOpen}
                           >
                             <Icon name="chevron" size={18} />
@@ -862,7 +1045,9 @@ export default function App() {
                           </div>
                         </div>
                         <div className="cell-cccd">
-                          <code className={`cccd-badge ${!group.citizenId ? "empty" : ""}`}>
+                          <code
+                            className={`cccd-badge ${!group.citizenId ? "empty" : ""}`}
+                          >
                             {group.citizenId || "Chưa có CCCD"}
                           </code>
                         </div>
@@ -871,22 +1056,32 @@ export default function App() {
                         </div>
                         <div className="cell-org">
                           {organization.conflict ? (
-                            <span className="conflict-badge" title={organization.value}>
+                            <span
+                              className="conflict-badge"
+                              title={organization.value}
+                            >
                               <Icon name="alert" size={14} />
                               <span>Nhiều đơn vị</span>
                             </span>
                           ) : (
-                            <span className="unit-text">{organization.value}</span>
+                            <span className="unit-text">
+                              {organization.value}
+                            </span>
                           )}
                         </div>
                         <div className="cell-unit">
                           {contactUnit.conflict ? (
-                            <span className="conflict-badge" title={contactUnit.value}>
+                            <span
+                              className="conflict-badge"
+                              title={contactUnit.value}
+                            >
                               <Icon name="alert" size={14} />
                               <span>Nhiều phòng ban</span>
                             </span>
                           ) : (
-                            <span className="unit-text">{contactUnit.value}</span>
+                            <span className="unit-text">
+                              {contactUnit.value}
+                            </span>
                           )}
                         </div>
                         <div className="cell-action">
@@ -909,7 +1104,9 @@ export default function App() {
                             <div>
                               <Icon name="ticket" size={18} />
                               <strong>Danh sách phiếu làm việc</strong>
-                              <span className="ticket-count-badge">{group.tickets.length}</span>
+                              <span className="ticket-count-badge">
+                                {group.tickets.length}
+                              </span>
                             </div>
                             <small>Mỗi dòng là một bản ghi phiếu độc lập</small>
                           </div>
@@ -997,7 +1194,9 @@ export default function App() {
                                       </span>
                                     </td>
                                     <td>
-                                      <span className="officer-code">{ticket.officerCode || "—"}</span>
+                                      <span className="officer-code">
+                                        {ticket.officerCode || "—"}
+                                      </span>
                                     </td>
                                     <td>
                                       {ticket.vehicle ? (
@@ -1015,10 +1214,14 @@ export default function App() {
                                         <i />
                                         {statusLabel[ticket.status]}
                                       </span>
-                                      <small className="valid-to-text">Đến {ticket.validTo}</small>
+                                      <small className="valid-to-text">
+                                        Đến {ticket.validTo}
+                                      </small>
                                     </td>
                                     <td>
-                                      <span className="date-created">{ticket.createdAt}</span>
+                                      <span className="date-created">
+                                        {ticket.createdAt}
+                                      </span>
                                     </td>
                                     <td>
                                       <button
@@ -1100,199 +1303,644 @@ export default function App() {
                 }}
               >
                 <span>←</span>
-                {detailMode === "ticket" ? "Quay lại hồ sơ cá nhân" : "Quay lại danh sách"}
+                {detailMode === "ticket"
+                  ? "Quay lại hồ sơ cá nhân"
+                  : "Quay lại danh sách"}
               </button>
               <div>
-                <h1>{detailMode === "ticket" ? "Chi tiết phiếu" : "Hồ sơ cá nhân"}</h1>
-                <p>{detailMode === "ticket" ? `Thông tin riêng của phiếu ${selected.ticketId}` : `Lịch sử ra vào của ${selected.fullName}`}</p>
+                <h1>
+                  {detailMode === "ticket" ? "Chi tiết phiếu" : "Hồ sơ cá nhân"}
+                </h1>
+                <p>
+                  {detailMode === "ticket"
+                    ? `Thông tin riêng của phiếu ${selected.ticketId}`
+                    : `Lịch sử ra vào của ${selected.fullName}`}
+                </p>
               </div>
             </div>
 
             <div className="detail-layout">
               <div className="profile-sidebar-column">
-              <aside className="profile-card">
-                <div className="detail-card-title basic-info-title">
-                  <div><Icon name="user" size={18} /><strong>Thông tin cơ bản cá nhân</strong></div>
-                </div>
-                <div className="profile-identity">
-                  <span className="profile-kind">HỒ SƠ KHÁCH</span>
-                  <div className="profile-avatar">
-                    {initials(selected.fullName)}
+                <aside className="profile-card">
+                  <div className="detail-card-title basic-info-title">
+                    <div>
+                      <Icon name="user" size={18} />
+                      <strong>Thông tin cơ bản cá nhân</strong>
+                    </div>
                   </div>
-                  <h2>{selected.fullName}</h2>
-                  <span className="profile-role">{selected.type}</span>
-                  {detailMode === "ticket" && <span className={`status ${selected.status}`}><i />{statusLabel[selected.status]}</span>}
-                </div>
-                <dl className="profile-info">
-                  <div>
-                    <dt>CCCD</dt>
-                    <dd>{selected.citizenId || "Chưa có CCCD"}</dd>
+                  <div className="profile-identity">
+                    <span className="profile-kind">HỒ SƠ KHÁCH</span>
+                    <div className="profile-avatar">
+                      {initials(selected.fullName)}
+                    </div>
+                    <h2>{selected.fullName}</h2>
+                    <span className="profile-role">{selected.type}</span>
+                    {detailMode === "ticket" && (
+                      <span className={`status ${selected.status}`}>
+                        <i />
+                        {statusLabel[selected.status]}
+                      </span>
+                    )}
                   </div>
-                  <div>
-                    <dt>Số điện thoại</dt>
-                    <dd>{selected.phone}</dd>
+                  <dl className="profile-info">
+                    <div>
+                      <dt>CCCD</dt>
+                      <dd>{selected.citizenId || "Chưa có CCCD"}</dd>
+                    </div>
+                    <div>
+                      <dt>Số điện thoại</dt>
+                      <dd>{selected.phone}</dd>
+                    </div>
+                    <div>
+                      <dt>Loại</dt>
+                      <dd>
+                        <span className="type-chip">{selected.type}</span>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Mã nhân viên</dt>
+                      <dd>{selected.officerCode}</dd>
+                    </div>
+                    <div>
+                      <dt>Đơn vị công tác</dt>
+                      <dd>{selected.organization}</dd>
+                    </div>
+                    <div>
+                      <dt>Đơn vị liên lạc</dt>
+                      <dd>{selected.contactUnit}</dd>
+                    </div>
+                    <div>
+                      <dt>Giới tính</dt>
+                      <dd>{profileExtras.gender}</dd>
+                    </div>
+                    <div>
+                      <dt>Ngày sinh</dt>
+                      <dd>{profileExtras.birthDate}</dd>
+                    </div>
+                  </dl>
+                </aside>
+                <section className="detail-card person-vehicles-card profile-vehicles-full">
+                  <div className="detail-card-title">
+                    <div>
+                      <Icon name="car" size={18} />
+                      <strong>Phương tiện</strong>
+                      <b>
+                        {detailMode === "person"
+                          ? personVehicles.length
+                          : selected.vehicle
+                            ? 1
+                            : 0}
+                      </b>
+                    </div>
                   </div>
-                  <div>
-                    <dt>Loại</dt>
-                    <dd>
-                      <span className="type-chip">{selected.type}</span>
-                    </dd>
+                  <div className="vehicle-table-wrap">
+                    <div className="vehicle-table">
+                      <div className="vehicle-table-head">
+                        <span>Biển số xe</span>
+                        <span>Loại</span>
+                        <span>Trạng thái</span>
+                        <span>Ngày tạo</span>
+                      </div>
+                      {detailMode === "person" ? (
+                        personVehicles.length ? (
+                          personVehicles.map((vehicle) => (
+                            <div
+                              className="vehicle-table-row"
+                              key={vehicle.plate}
+                            >
+                              <strong>{vehicle.plate}</strong>
+                              <span>{vehicle.type}</span>
+                              <span>
+                                <i className="vehicle-registered">Hoạt động</i>
+                              </span>
+                              <span>{vehicle.createdAt}</span>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="vehicle-empty-row vehicle-empty">
+                            Chưa đăng ký phương tiện
+                          </div>
+                        )
+                      ) : selected.vehicle ? (
+                        <div className="vehicle-table-row">
+                          <strong>{selected.vehicle}</strong>
+                          <span>—</span>
+                          <span>
+                            <i className="vehicle-registered">Hoạt động</i>
+                          </span>
+                          <span>{selected.createdAt}</span>
+                        </div>
+                      ) : (
+                        <div className="vehicle-empty-row vehicle-empty">
+                          Phiếu này chưa đăng ký phương tiện
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <dt>Mã nhân viên</dt>
-                    <dd>{selected.officerCode}</dd>
-                  </div>
-                  <div>
-                    <dt>Đơn vị công tác</dt>
-                    <dd>{selected.organization}</dd>
-                  </div>
-                  <div>
-                    <dt>Đơn vị liên lạc</dt>
-                    <dd>{selected.contactUnit}</dd>
-                  </div>
-                  <div>
-                    <dt>Giới tính</dt>
-                    <dd>{profileExtras.gender}</dd>
-                  </div>
-                  <div>
-                    <dt>Ngày sinh</dt>
-                    <dd>{profileExtras.birthDate}</dd>
-                  </div>
-                </dl>
-              </aside>
+                </section>
               </div>
 
               <div className="detail-main-column">
                 {detailMode === "person" ? (
                   <>
-                  <section className="detail-card person-tickets-card">
-                    <div className="detail-card-title">
-                      <div><Icon name="ticket" size={18} /><strong>Thẻ đăng ký</strong><b>{selectedPersonTickets.length}</b></div>
-                      <small>Ba phiếu gần nhất hiển thị trước; cuộn để xem các phiếu còn lại</small>
-                    </div>
-                    <div className="person-ticket-overview-list">
-                      {selectedPersonTickets.map((ticket) => (
-                        <button className="person-ticket-overview" key={ticket.id} onClick={() => openTicket(ticket)}>
-                          <span className="ticket-trigger-icon"><Icon name="ticket" size={17} /></span>
-                          <span className="person-ticket-overview-main"><strong>{ticket.ticketId}</strong><small>Từ ngày {ticket.createdAt} đến ngày {ticket.validTo}</small><span className="person-ticket-date-preview">{ticket.accessDates.slice(0, 2).map((date) => <i key={date}>{formatCalendarDate(date)}</i>)}</span></span>
-                          <span className={`status ${ticket.status}`}><i />{statusLabel[ticket.status]}</span>
-                          <span className="ticket-open-label">Xem chi tiết →</span>
-                        </button>
-                      ))}
-                    </div>
-                  </section>
+                    <section className="detail-card person-tickets-card">
+                      <div className="detail-card-title">
+                        <div>
+                          <Icon name="ticket" size={18} />
+                          <strong>Thẻ đăng ký</strong>
+                          <b>{selectedPersonTickets.length}</b>
+                        </div>
+                        <small>
+                          Ba phiếu gần nhất hiển thị trước; cuộn để xem các
+                          phiếu còn lại
+                        </small>
+                      </div>
+                      <div className="person-ticket-overview-list">
+                        {selectedPersonTickets.map((ticket) => (
+                          <button
+                            className="person-ticket-overview"
+                            key={ticket.id}
+                            onClick={() => openTicket(ticket)}
+                          >
+                            <span className="ticket-trigger-icon">
+                              <Icon name="ticket" size={17} />
+                            </span>
+                            <span className="person-ticket-overview-main">
+                              <strong>{ticket.ticketId}</strong>
+                              <small>
+                                Từ ngày {ticket.createdAt} đến ngày{" "}
+                                {ticket.validTo}
+                              </small>
+                              <span className="person-ticket-date-preview">
+                                {ticket.accessDates.slice(0, 2).map((date) => (
+                                  <i key={date}>{formatCalendarDate(date)}</i>
+                                ))}
+                              </span>
+                            </span>
+                            <span className={`status ${ticket.status}`}>
+                              <i />
+                              {statusLabel[ticket.status]}
+                            </span>
+                            <span className="ticket-open-label">
+                              Xem chi tiết →
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </section>
 
-                  <section className="detail-card person-history-card">
-                    <div className="detail-card-title">
-                      <div><Icon name="calendar" size={18} /><strong>Lịch sử ra vào</strong><b>{personAccessHistory.length}</b></div>
-                      <small>Lịch sử ra vào của {selected.fullName}</small>
-                    </div>
-                    <div className="person-history-table-wrap">
-                      <table className="person-history-table">
-                        <thead><tr><th>THỜI GIAN</th><th>HỆ THỐNG</th><th>THIẾT BỊ</th><th>KHU VỰC</th><th>HƯỚNG</th><th>XÁC THỰC</th><th>KẾT QUẢ</th></tr></thead>
-                        <tbody>
-                          {personAccessHistory.map(({ ticket, date, index }) => (
-                            <tr key={`${ticket.id}-${date}-${index}`}>
-                              <td>{index % 2 === 0 ? "08:02:14" : "16:58:06"} {formatCalendarDate(date)}</td>
-                              <td><span className="system-chip">ACS</span></td>
-                              <td>{index % 2 === 0 ? "Cửa 200.1" : "Cửa 201.1"}</td>
-                              <td>{index % 2 === 0 ? "DC1.A.N.2.KT" : "DC1.A.N.FT.HC"}</td>
-                              <td>{index % 2 === 0 ? <span className="direction-in">↪ Vào</span> : <span className="direction-out">↩ Ra</span>}</td>
-                              <td>Khuôn mặt</td>
-                              <td><span className="result-granted">Thành công</span></td>
+                    <section className="detail-card person-history-card">
+                      <div className="detail-card-title">
+                        <div>
+                          <Icon name="calendar" size={18} />
+                          <strong>Lịch sử ra vào</strong>
+                          <b>{personAccessHistory.length}</b>
+                        </div>
+                        <small>Lịch sử ra vào của {selected.fullName}</small>
+                      </div>
+                      <div className="person-history-table-wrap">
+                        <table className="person-history-table">
+                          <thead>
+                            <tr>
+                              <th>THỜI GIAN</th>
+                              <th>HỆ THỐNG</th>
+                              <th>THIẾT BỊ</th>
+                              <th>KHU VỰC</th>
+                              <th>HƯỚNG</th>
+                              <th>XÁC THỰC</th>
+                              <th>KẾT QUẢ</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </section>
+                          </thead>
+                          <tbody>
+                            {personAccessHistory.map(
+                              ({ ticket, date, index }) => (
+                                <tr key={`${ticket.id}-${date}-${index}`}>
+                                  <td>
+                                    {index % 2 === 0 ? "08:02:14" : "16:58:06"}{" "}
+                                    {formatCalendarDate(date)}
+                                  </td>
+                                  <td>
+                                    <span className="system-chip">ACS</span>
+                                  </td>
+                                  <td>
+                                    {index % 2 === 0
+                                      ? "Cửa 200.1"
+                                      : "Cửa 201.1"}
+                                  </td>
+                                  <td>
+                                    {index % 2 === 0
+                                      ? "DC1.A.N.2.KT"
+                                      : "DC1.A.N.FT.HC"}
+                                  </td>
+                                  <td>
+                                    {index % 2 === 0 ? (
+                                      <span className="direction-in">
+                                        ↪ Vào
+                                      </span>
+                                    ) : (
+                                      <span className="direction-out">
+                                        ↩ Ra
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td>Khuôn mặt</td>
+                                  <td>
+                                    <span className="result-granted">
+                                      Thành công
+                                    </span>
+                                  </td>
+                                </tr>
+                              ),
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
                   </>
                 ) : (
-                <section className={`person-ticket-selector ${detailMode === "ticket" ? "ticket-detail-shell" : ""}`} aria-label="Chi tiết phiếu đang xem">
-                  <div className="person-ticket-selector-heading">
-                    <div><strong>Thẻ đăng ký</strong><span>{selected.ticketId}</span></div>
-                    <small>Thông tin và lịch sử chỉ thuộc phiếu đang xem</small>
-                  </div>
-                  <div className={`person-ticket-list ${detailMode === "ticket" ? "ticket-single-view" : ""}`}>
-                    {selectedPersonTickets.filter((ticket) => ticket.id === selected.id).map((ticket) => {
-                      const isExpanded = expandedTicketIds.has(ticket.id);
-                      return (
-                        <article className={`person-ticket-accordion ${isExpanded ? "expanded" : ""}`} key={ticket.id}>
-                          <button
-                            className="person-ticket-trigger"
-                            aria-expanded={isExpanded}
-                            onClick={() => {
-                              setSelected(ticket);
-                              setExpandedTicketIds((current) => {
-                                const next = new Set(current);
-                                if (next.has(ticket.id)) next.delete(ticket.id);
-                                else next.add(ticket.id);
-                                return next;
-                              });
-                            }}
-                          >
-                            <span className="ticket-trigger-icon"><Icon name="ticket" size={17} /></span>
-                            <span className="ticket-trigger-main"><strong>{ticket.ticketId}</strong><small>Từ ngày {ticket.createdAt} đến ngày {ticket.validTo}</small></span>
-                            <span className={`status ${ticket.status}`}><i />{statusLabel[ticket.status]}</span>
-                            <span className="ticket-trigger-chevron">⌄</span>
-                          </button>
-                          {isExpanded && (
-                            <div className="person-ticket-expanded-content">
-                              <div className="ticket-card-title"><div className="ticket-card-title-label"><Icon name="user" size={23} /><strong>Thẻ Đăng ký</strong></div><span className="ticket-card-validity">Từ ngày {ticket.createdAt} đến ngày {ticket.validTo}</span></div>
-                              <section className="ticket-work-information">
-                                <div className="ticket-work-information-heading"><Icon name="calendar" size={16} /><strong>THÔNG TIN LỊCH LÀM VIỆC</strong></div>
-                                <div className="ticket-work-information-grid">
-                                  <div><span>Mục đích</span><strong>{profileExtras.purpose}</strong></div>
-                                  <div><span>Ngày đăng ký</span><strong>{profileExtras.registeredAt}</strong></div>
-                                  <div className="work-note"><span>Ghi chú</span><strong>{profileExtras.note}</strong></div>
-                                  <div className="work-area"><span>Khu vực làm việc</span><strong>{ticket.contactUnit}</strong><small>{ticket.organization}</small></div>
-                                </div>
-                              </section>
-                              <section className="ticket-registration-schedule">
-                                <div className="ticket-registration-heading"><div><Icon name="calendar" size={16} /><strong>LỊCH RA VÀO</strong></div></div>
-                                <div className="ticket-registration-days">
-                                  {[...ticket.accessDates].sort().map((date) => (
-                                    <article className="ticket-registration-day" key={date}>
-                                      <div className="ticket-registration-date"><Icon name="calendar" size={15} /><strong>{formatCalendarDate(date)}</strong></div>
-                                      <span className="ticket-registration-time">00:00 - 23:59</span>
-                                      <small>Thời hạn hiệu lực: Từ ngày {ticket.createdAt} đến ngày {ticket.validTo}</small>
-                                    </article>
-                                  ))}
-                                </div>
-                              </section>
-                              <section className="ticket-rack-section">
-                                <div className="ticket-resource-grid">
-                                  <section className="ticket-resource-panel">
-                                    <header className="ticket-resource-heading">
-                                      <div><span className="resource-symbol cage-symbol">▦</span><strong>LỒNG RACK</strong><b>1</b></div>
-                                      <span>XEM TẤT CẢ (1)</span>
-                                    </header>
-                                    <article className="ticket-rack-item">
-                                      <span className="rack-icon cage-rack-icon">▣</span>
-                                      <div><strong>CAGE-A</strong><small>Lồng máy chủ khu A</small></div>
-                                      <code>ⓘ</code>
-                                    </article>
+                  <section
+                    className={`person-ticket-selector ${detailMode === "ticket" ? "ticket-detail-shell" : ""}`}
+                    aria-label="Chi tiết phiếu đang xem"
+                  >
+                    <div className="person-ticket-selector-heading">
+                      <div>
+                        <strong>Thẻ đăng ký</strong>
+                        <span>{selected.ticketId}</span>
+                      </div>
+                      <small>
+                        Thông tin và lịch sử chỉ thuộc phiếu đang xem
+                      </small>
+                    </div>
+                    <div
+                      className={`person-ticket-list ${detailMode === "ticket" ? "ticket-single-view" : ""}`}
+                    >
+                      {selectedPersonTickets
+                        .filter((ticket) => ticket.id === selected.id)
+                        .map((ticket) => {
+                          const isExpanded = expandedTicketIds.has(ticket.id);
+                          const ticketScheduleDates = [...ticket.accessDates]
+                            .sort()
+                            .filter(
+                              (date) =>
+                                !scheduleDateRange.from ||
+                                !scheduleDateRange.to ||
+                                (date >= scheduleDateRange.from &&
+                                  date <= scheduleDateRange.to),
+                            );
+                          return (
+                            <article
+                              className={`person-ticket-accordion ${isExpanded ? "expanded" : ""}`}
+                              key={ticket.id}
+                            >
+                              <button
+                                className="person-ticket-trigger"
+                                aria-expanded={isExpanded}
+                                onClick={() => {
+                                  setSelected(ticket);
+                                  setExpandedTicketIds((current) => {
+                                    const next = new Set(current);
+                                    if (next.has(ticket.id))
+                                      next.delete(ticket.id);
+                                    else next.add(ticket.id);
+                                    return next;
+                                  });
+                                }}
+                              >
+                                <span className="ticket-trigger-icon">
+                                  <Icon name="ticket" size={17} />
+                                </span>
+                                <span className="ticket-trigger-main">
+                                  <strong>{ticket.ticketId}</strong>
+                                  <small>
+                                    Từ ngày {ticket.createdAt} đến ngày{" "}
+                                    {ticket.validTo}
+                                  </small>
+                                </span>
+                                <span className={`status ${ticket.status}`}>
+                                  <i />
+                                  {statusLabel[ticket.status]}
+                                </span>
+                                <span className="ticket-trigger-chevron">
+                                  ⌄
+                                </span>
+                              </button>
+                              {isExpanded && (
+                                <div className="person-ticket-expanded-content">
+                                  <div className="ticket-card-title">
+                                    <div className="ticket-card-title-label">
+                                      <Icon name="user" size={23} />
+                                      <strong>Thẻ Đăng ký</strong>
+                                    </div>
+                                    <div className="ticket-card-validity-tags" aria-label={`Thời hạn hiệu lực từ ngày ${ticket.createdAt} đến ngày ${ticket.validTo}`}>
+                                      <div className="validity-tag start-tag">
+                                        <span className="validity-tag-icon"><Icon name="calendar" size={14} /></span>
+                                        <span className="validity-tag-label">Từ ngày</span>
+                                        <strong className="validity-tag-date">{ticket.createdAt}</strong>
+                                      </div>
+                                      <span className="validity-tag-divider" aria-hidden="true">
+                                        <svg width="18" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                                          <path d="M5 12h14M13 5l7 7-7 7" />
+                                        </svg>
+                                      </span>
+                                      <div className="validity-tag end-tag">
+                                        <span className="validity-tag-icon"><Icon name="calendar" size={14} /></span>
+                                        <span className="validity-tag-label">Đến ngày</span>
+                                        <strong className="validity-tag-date">{ticket.validTo}</strong>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <section className="ticket-work-information">
+                                    <div className="ticket-work-information-heading">
+                                      <Icon name="calendar" size={16} />
+                                      <strong>THÔNG TIN LỊCH LÀM VIỆC</strong>
+                                    </div>
+                                    <div className="ticket-work-information-grid">
+                                      <div>
+                                        <span>Mục đích</span>
+                                        <strong>{profileExtras.purpose}</strong>
+                                      </div>
+                                      <div>
+                                        <span>Ngày đăng ký</span>
+                                        <strong>
+                                          {profileExtras.registeredAt}
+                                        </strong>
+                                      </div>
+                                      <div className="work-note">
+                                        <span>Ghi chú</span>
+                                        <strong>{profileExtras.note}</strong>
+                                      </div>
+                                      <div className="work-area">
+                                        <span>Khu vực làm việc</span>
+                                        <strong>{ticket.contactUnit}</strong>
+                                        <small>{ticket.organization}</small>
+                                      </div>
+                                    </div>
                                   </section>
-                                  <section className="ticket-resource-panel">
-                                    <header className="ticket-resource-heading">
-                                      <div><span className="resource-symbol rack-symbol">▤</span><strong>TỦ RACK</strong><b>1</b></div>
-                                      <span>XEM TẤT CẢ (1)</span>
-                                    </header>
-                                    <article className="ticket-rack-item">
-                                      <span className="rack-icon rack-resource-icon">▤</span>
-                                      <div><strong>SIM-GRANT-1</strong><small>Khu vực được cấp quyền · {ticket.contactUnit}</small></div>
-                                      <code>ⓘ</code>
-                                    </article>
+                                  <section className="ticket-registration-schedule">
+                                    <div className="ticket-registration-heading">
+                                      <div>
+                                        <Icon name="calendar" size={16} />
+                                        <strong>LỊCH RA VÀO</strong>
+                                      </div>
+                                      <div className="ticket-schedule-filter-actions">
+                                        {scheduleDateRange.from &&
+                                          scheduleDateRange.to && (
+                                            <button
+                                              className="ticket-schedule-clear-filter"
+                                              type="button"
+                                              onClick={() =>
+                                                setScheduleDateRange({
+                                                  from: null,
+                                                  to: null,
+                                                })
+                                              }
+                                            >
+                                              Xóa lọc
+                                            </button>
+                                          )}
+                                        <button
+                                          className="ticket-schedule-filter-button"
+                                          type="button"
+                                          aria-expanded={
+                                            showScheduleRangePicker
+                                          }
+                                          onClick={() =>
+                                            setShowScheduleRangePicker(
+                                              (open) => !open,
+                                            )
+                                          }
+                                        >
+                                          <Icon name="calendar" size={13} />
+                                          {scheduleDateRange.from &&
+                                          scheduleDateRange.to
+                                            ? `${formatCalendarDate(scheduleDateRange.from)} – ${formatCalendarDate(scheduleDateRange.to)}`
+                                            : "Lọc theo ngày"}
+                                        </button>
+                                      </div>
+                                    </div>
+                                    {showScheduleRangePicker && (
+                                      <div className="ticket-schedule-date-picker">
+                                        <div className="ticket-schedule-date-picker-header">
+                                          <button
+                                            type="button"
+                                            aria-label="Tháng trước"
+                                            onClick={() =>
+                                              setScheduleRangeMonth((month) => {
+                                                const [year, number] = month
+                                                  .split("-")
+                                                  .map(Number);
+                                                const date = new Date(
+                                                  year,
+                                                  number - 2,
+                                                  1,
+                                                );
+                                                return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+                                              })
+                                            }
+                                          >
+                                            ‹
+                                          </button>
+                                          <strong>
+                                            {new Intl.DateTimeFormat("vi-VN", {
+                                              month: "long",
+                                              year: "numeric",
+                                            }).format(
+                                              new Date(
+                                                `${scheduleRangeMonth}-02T00:00:00`,
+                                              ),
+                                            )}
+                                          </strong>
+                                          <button
+                                            type="button"
+                                            aria-label="Tháng sau"
+                                            onClick={() =>
+                                              setScheduleRangeMonth((month) => {
+                                                const [year, number] = month
+                                                  .split("-")
+                                                  .map(Number);
+                                                const date = new Date(
+                                                  year,
+                                                  number,
+                                                  1,
+                                                );
+                                                return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+                                              })
+                                            }
+                                          >
+                                            ›
+                                          </button>
+                                        </div>
+                                        <div className="ticket-schedule-date-weekdays">
+                                          {[
+                                            "T2",
+                                            "T3",
+                                            "T4",
+                                            "T5",
+                                            "T6",
+                                            "T7",
+                                            "CN",
+                                          ].map((day) => (
+                                            <span key={day}>{day}</span>
+                                          ))}
+                                        </div>
+                                        <div className="ticket-schedule-date-grid">
+                                          {scheduleRangeCalendarDays.map(
+                                            (date, index) => {
+                                              const inRange = Boolean(
+                                                date &&
+                                                scheduleDateRange.from &&
+                                                scheduleDateRange.to &&
+                                                date >=
+                                                  scheduleDateRange.from &&
+                                                date <= scheduleDateRange.to,
+                                              );
+                                              const selectedDate = Boolean(
+                                                date &&
+                                                (date ===
+                                                  scheduleDateRange.from ||
+                                                  date ===
+                                                    scheduleDateRange.to),
+                                              );
+                                              return date ? (
+                                                <button
+                                                  key={date}
+                                                  className={`${inRange ? "in-range" : ""} ${selectedDate ? "selected" : ""}`}
+                                                  type="button"
+                                                  onClick={() =>
+                                                    chooseScheduleRangeDate(
+                                                      date,
+                                                    )
+                                                  }
+                                                >
+                                                  {Number(date.slice(-2))}
+                                                </button>
+                                              ) : (
+                                                <span key={`blank-${index}`} />
+                                              );
+                                            },
+                                          )}
+                                        </div>
+                                        <small>
+                                          {scheduleDateRange.from &&
+                                          !scheduleDateRange.to
+                                            ? `Chọn ngày kết thúc sau ${formatCalendarDate(scheduleDateRange.from)}`
+                                            : "Chọn ngày bắt đầu rồi ngày kết thúc"}
+                                        </small>
+                                      </div>
+                                    )}
+                                    <div className="ticket-registration-days">
+                                      {ticketScheduleDates
+                                        .slice(0, 6)
+                                        .map((date) =>
+                                          renderScheduleDate(ticket, date),
+                                        )}
+                                      {!ticketScheduleDates.length && (
+                                        <div className="ticket-schedule-empty">
+                                          Không có ngày ra vào trong khoảng đã
+                                          chọn.
+                                        </div>
+                                      )}
+                                    </div>
+                                    {ticketScheduleDates.length > 6 && (
+                                      <button
+                                        className="ticket-access-show-all"
+                                        type="button"
+                                        onClick={() =>
+                                          setShowSchedulePopup(true)
+                                        }
+                                      >
+                                        Xem tất cả ({ticketScheduleDates.length}
+                                        )
+                                      </button>
+                                    )}
+                                  </section>
+                                  <section className="ticket-rack-section">
+                                    <div className="ticket-resource-grid">
+                                      <section className="ticket-resource-panel">
+                                        <header className="ticket-resource-heading">
+                                          <div>
+                                            <span className="resource-symbol cage-symbol">
+                                              ▦
+                                            </span>
+                                            <strong>LỒNG RACK</strong>
+                                            <b>{ticketCages.length}</b>
+                                          </div>
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              setShowResourcePopup("cage")
+                                            }
+                                          >
+                                            XEM TẤT CẢ ({ticketCages.length})
+                                          </button>
+                                        </header>
+                                        <div className="ticket-resource-items">
+                                          {ticketCages.map(
+                                            ([name, description]) => (
+                                              <article
+                                                className="ticket-rack-item"
+                                                key={name}
+                                              >
+                                                <span className="rack-icon cage-rack-icon">
+                                                  ▣
+                                                </span>
+                                                <div>
+                                                  <strong>{name}</strong>
+                                                  <small>{description}</small>
+                                                </div>
+                                                <code>ⓘ</code>
+                                              </article>
+                                            ),
+                                          )}
+                                        </div>
+                                      </section>
+                                      <section className="ticket-resource-panel">
+                                        <header className="ticket-resource-heading">
+                                          <div>
+                                            <span className="resource-symbol rack-symbol">
+                                              ▤
+                                            </span>
+                                            <strong>TỦ RACK</strong>
+                                            <b>{ticketRacks.length}</b>
+                                          </div>
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              setShowResourcePopup("rack")
+                                            }
+                                          >
+                                            XEM TẤT CẢ ({ticketRacks.length})
+                                          </button>
+                                        </header>
+                                        <div className="ticket-resource-items">
+                                          {ticketRacks.map(
+                                            ([name, description]) => (
+                                              <article
+                                                className="ticket-rack-item"
+                                                key={name}
+                                              >
+                                                <span className="rack-icon rack-resource-icon">
+                                                  ▤
+                                                </span>
+                                                <div>
+                                                  <strong>{name}</strong>
+                                                  <small>{description}</small>
+                                                </div>
+                                                <code>ⓘ</code>
+                                              </article>
+                                            ),
+                                          )}
+                                        </div>
+                                      </section>
+                                    </div>
                                   </section>
                                 </div>
-                              </section>
-                            </div>
-                          )}
-                        </article>
-                      );
-                    })}
-                  </div>
-                </section>
+                              )}
+                            </article>
+                          );
+                        })}
+                    </div>
+                  </section>
                 )}
 
                 <section className="detail-card registration-card">
@@ -1346,7 +1994,12 @@ export default function App() {
                         <div className="calendar-weekdays">
                           {["T2", "T3", "T4", "T5", "T6", "T7", "CN"].map(
                             (day) => (
-                              <span key={day} className={day === "T7" || day === "CN" ? "weekend" : ""}>
+                              <span
+                                key={day}
+                                className={
+                                  day === "T7" || day === "CN" ? "weekend" : ""
+                                }
+                              >
                                 {day}
                               </span>
                             ),
@@ -1373,7 +2026,9 @@ export default function App() {
                                     : ""
                                 }`}
                               >
-                                <span className="day-number">{Number(date.slice(-2))}</span>
+                                <span className="day-number">
+                                  {Number(date.slice(-2))}
+                                </span>
                                 {ticketsByAccessDate.has(date) && (
                                   <span className="day-badge-dot">
                                     <span className="dot" />
@@ -1406,7 +2061,9 @@ export default function App() {
                       <div className="day-ticket-panel">
                         <div className="day-ticket-heading">
                           <div>
-                            <span className="sub-title">CHI TIẾT PHIẾU TRONG NGÀY</span>
+                            <span className="sub-title">
+                              CHI TIẾT PHIẾU TRONG NGÀY
+                            </span>
                             <strong className="main-date">
                               {formatCalendarDate(selectedCalendarDate)}
                             </strong>
@@ -1431,9 +2088,13 @@ export default function App() {
                                     {statusLabel[ticket.status]}
                                   </span>
                                   {ticket.id === selected.id ? (
-                                    <span className="viewing-pill">Đang xem</span>
+                                    <span className="viewing-pill">
+                                      Đang xem
+                                    </span>
                                   ) : (
-                                    <span className="click-view-hint">Xem chi tiết</span>
+                                    <span className="click-view-hint">
+                                      Xem chi tiết
+                                    </span>
                                   )}
                                 </div>
                                 <div className="day-ticket-body">
@@ -1452,7 +2113,8 @@ export default function App() {
                                   <div className="ticket-unit-row">
                                     <span>🏢</span>
                                     <small>
-                                      {ticket.contactUnit} · Mã NV: <b>{ticket.officerCode}</b>
+                                      {ticket.contactUnit} · Mã NV:{" "}
+                                      <b>{ticket.officerCode}</b>
                                     </small>
                                   </div>
                                 </div>
@@ -1466,17 +2128,23 @@ export default function App() {
                             </div>
                             <strong>Không có phiếu trong ngày</strong>
                             <p>
-                              Ngày <b>{formatCalendarDate(selectedCalendarDate)}</b> không có lịch làm việc đăng ký.
+                              Ngày{" "}
+                              <b>{formatCalendarDate(selectedCalendarDate)}</b>{" "}
+                              không có lịch làm việc đăng ký.
                             </p>
                             <div className="empty-hint">
                               <span className="dot-hint" />
-                              <span>Hãy chọn các ngày có chấm xanh trên lịch</span>
+                              <span>
+                                Hãy chọn các ngày có chấm xanh trên lịch
+                              </span>
                             </div>
                             {ticketsByAccessDate.size > 0 && (
                               <button
                                 className="btn-select-active-date"
                                 onClick={() => {
-                                  const dates = Array.from(ticketsByAccessDate.keys()).sort();
+                                  const dates = Array.from(
+                                    ticketsByAccessDate.keys(),
+                                  ).sort();
                                   if (dates[0]) {
                                     setSelectedCalendarDate(dates[0]);
                                     setCalendarMonth(dates[0].slice(0, 7));
@@ -1484,7 +2152,13 @@ export default function App() {
                                 }}
                               >
                                 <Icon name="ticket" size={15} />
-                                Chuyển đến ngày có phiếu ({formatCalendarDate(Array.from(ticketsByAccessDate.keys()).sort()[0])})
+                                Chuyển đến ngày có phiếu (
+                                {formatCalendarDate(
+                                  Array.from(
+                                    ticketsByAccessDate.keys(),
+                                  ).sort()[0],
+                                )}
+                                )
                               </button>
                             )}
                           </div>
@@ -1606,26 +2280,107 @@ export default function App() {
                 </div>
               </div>
             </div>
-            <section className="detail-card person-vehicles-card profile-vehicles-full">
-              <div className="detail-card-title">
-                <div><Icon name="car" size={18} /><strong>Phương tiện</strong><b>{detailMode === "person" ? personVehicles.length : selected.vehicle ? 1 : 0}</b></div>
-              </div>
-              <div className="vehicle-table-wrap">
-                <table className="vehicle-table">
-                  <thead><tr><th>Biển số xe</th><th>Loại</th><th>Trạng thái</th><th>Ngày tạo</th></tr></thead>
-                  <tbody>
-                    {detailMode === "person" ? (
-                      personVehicles.length ? personVehicles.map((vehicle) => (
-                        <tr key={vehicle.plate}><td><strong>{vehicle.plate}</strong></td><td>{vehicle.type}</td><td><span className="vehicle-registered">Hoạt động</span></td><td>{vehicle.createdAt}</td></tr>
-                      )) : <tr><td colSpan={4} className="vehicle-empty">Chưa đăng ký phương tiện</td></tr>
-                    ) : selected.vehicle ? (
-                      <tr><td><strong>{selected.vehicle}</strong></td><td>—</td><td><span className="vehicle-registered">Hoạt động</span></td><td>{selected.createdAt}</td></tr>
-                    ) : <tr><td colSpan={4} className="vehicle-empty">Phiếu này chưa đăng ký phương tiện</td></tr>}
-                  </tbody>
-                </table>
-              </div>
-            </section>
+          </div>
+          {showSchedulePopup && detailMode === "ticket" && (
+            <div
+              className="schedule-popup-backdrop"
+              onClick={() => setShowSchedulePopup(false)}
+            >
+              <section
+                className="schedule-popup"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="schedule-popup-title"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <header className="schedule-popup-header">
+                  <div>
+                    <Icon name="calendar" size={18} />
+                    <strong id="schedule-popup-title">Lịch ra vào</strong>
+                    <span>{selected.accessDates.length} ngày</span>
+                  </div>
+                  <button
+                    type="button"
+                    aria-label="Đóng"
+                    onClick={() => setShowSchedulePopup(false)}
+                  >
+                    ×
+                  </button>
+                </header>
+                <div className="schedule-popup-days">
+                  {[...selected.accessDates]
+                    .sort()
+                    .filter(
+                      (date) =>
+                        !scheduleDateRange.from ||
+                        !scheduleDateRange.to ||
+                        (date >= scheduleDateRange.from &&
+                          date <= scheduleDateRange.to),
+                    )
+                    .map((date) => renderScheduleDate(selected, date))}
+                </div>
+              </section>
             </div>
+          )}
+          {showResourcePopup && detailMode === "ticket" && (
+            <div
+              className="schedule-popup-backdrop"
+              onClick={() => setShowResourcePopup(null)}
+            >
+              <section
+                className="schedule-popup resource-popup"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="resource-popup-title"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <header className="schedule-popup-header">
+                  <div>
+                    <span
+                      className={`resource-symbol ${showResourcePopup === "cage" ? "cage-symbol" : "rack-symbol"}`}
+                    >
+                      {showResourcePopup === "cage" ? "▦" : "▤"}
+                    </span>
+                    <strong id="resource-popup-title">
+                      {showResourcePopup === "cage" ? "Lồng rack" : "Tủ rack"}
+                    </strong>
+                    <span>
+                      {showResourcePopup === "cage"
+                        ? ticketCages.length
+                        : ticketRacks.length}{" "}
+                      mục
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    aria-label="Đóng"
+                    onClick={() => setShowResourcePopup(null)}
+                  >
+                    ×
+                  </button>
+                </header>
+                <div className="resource-popup-items">
+                  {(showResourcePopup === "cage"
+                    ? ticketCages
+                    : ticketRacks
+                  ).map(([name, description]) => (
+                    <article className="ticket-rack-item" key={name}>
+                      <span
+                        className={`rack-icon ${showResourcePopup === "cage" ? "cage-rack-icon" : "rack-resource-icon"}`}
+                      >
+                        {showResourcePopup === "cage" ? "▣" : "▤"}
+                      </span>
+                      <div>
+                        <strong>{name}</strong>
+                        <small>{description}</small>
+                      </div>
+                      <code>ⓘ</code>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            </div>
+          )}
         </section>
       )}
     </div>

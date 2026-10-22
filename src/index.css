@@ -1313,6 +1313,79 @@ td small { margin-top: 3px; color: #64748b; font-size: 12px; }
   font-weight: 600;
 }
 
+.ticket-card-validity-tags {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.validity-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  line-height: 1;
+}
+
+.validity-tag.start-tag {
+  border-color: #cbd5e1;
+  background: #ffffff;
+}
+
+.validity-tag.end-tag {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.validity-tag-icon {
+  display: flex;
+  align-items: center;
+}
+
+.validity-tag.start-tag .validity-tag-icon {
+  color: #64748b;
+}
+
+.validity-tag.end-tag .validity-tag-icon {
+  color: #2563eb;
+}
+
+.validity-tag-label {
+  color: #64748b;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.validity-tag.end-tag .validity-tag-label {
+  color: #1d4ed8;
+}
+
+.validity-tag-date {
+  color: #0f172a;
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.validity-tag.end-tag .validity-tag-date {
+  color: #1e40af;
+}
+
+.validity-tag-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3b82f6;
+  opacity: 0.9;
+}
+
 /* THÔNG TIN LỊCH LÀM VIỆC */
 .ticket-work-information {
   margin: 14px 18px 0;
