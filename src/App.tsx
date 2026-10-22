@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 
 type TicketStatus = "active" | "expired" | "inactive";
 
@@ -42,7 +42,7 @@ const tickets: Ticket[] = [
     status: "active",
     validTo: "25/09/2026",
     createdAt: "22/07/2026",
-    accessDates: ["2026-09-22", "2026-09-23", "2026-09-24", "2026-09-25"],
+    accessDates: ["2026-07-22","2026-07-23","2026-07-28","2026-07-30","2026-08-01","2026-08-04","2026-08-06","2026-08-11","2026-08-13","2026-08-18","2026-08-20","2026-08-25","2026-08-27","2026-09-01","2026-09-03","2026-09-08","2026-09-10","2026-09-15","2026-09-17","2026-09-22","2026-09-23","2026-09-24","2026-09-25"],
   },
   {
     id: "rec-0052",
@@ -198,13 +198,30 @@ const tickets: Ticket[] = [
     createdAt: "01/09/2026",
     accessDates: ["2026-09-01", "2026-09-03"],
   },
-].map((ticket) =>
+  {
+    id: "rec-0091",
+    personId: "person-one-day",
+    ticketId: "TICKET-20261022-0091",
+    fullName: "Trần Gia Bảo",
+    citizenId: "079000000091",
+    phone: "0900 000 091",
+    organization: "Công ty TNHH Dữ liệu Việt",
+    contactUnit: "Phòng Hạ tầng CNTT",
+    type: "Khách bộ ngành",
+    officerCode: "NV091",
+    vehicle: "30G-12345",
+    status: "active",
+    validTo: "22/10/2026",
+    createdAt: "22/10/2026",
+    accessDates: ["2026-10-22"],
+  },
+].map((ticket): Ticket =>
   ticket.personId === "person-linh"
-    ? {
+    ? ({
         ...ticket,
         accessDates: Array.from(new Set([...ticket.accessDates, "2026-09-22"])),
-      }
-    : ticket,
+      } as Ticket)
+    : (ticket as Ticket),
 );
 
 const icons = {
@@ -413,11 +430,13 @@ export default function App() {
     new Set(["cccd:900000123478"]),
   );
   const [selected, setSelected] = useState<Ticket | null>(null);
+  const [detailMode, setDetailMode] = useState<"person" | "ticket">("person");
+  const [expandedTicketIds, setExpandedTicketIds] = useState<Set<string>>(new Set());
   const [calendarMonth, setCalendarMonth] = useState("2026-09");
-  const [selectedCalendarDate, setSelectedCalendarDate] =
-    useState("2026-09-22");
+  const [selectedCalendarDate, setSelectedCalendarDate] = useState("2026-09-22");
   const [page, setPage] = useState(1);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [showAllScheduleDates, setShowAllScheduleDates] = useState(false);
   const pageSize = 4;
 
   useEffect(() => {
@@ -463,51 +482,88 @@ export default function App() {
   const selectedPersonTickets = useMemo(
     () =>
       selected
-        ? tickets.filter((ticket) => ticket.personId === selected.personId)
+        ? tickets
+            .filter((ticket) => ticket.personId === selected.personId)
+            .sort((a, b) =>
+              b.createdAt.split("/").reverse().join("-").localeCompare(
+                a.createdAt.split("/").reverse().join("-"),
+              ),
+            )
         : [],
     [selected],
   );
 
+  const personVehicles = useMemo(() => {
+    if (selected?.personId === "person-linh") {
+      return [
+        { plate: "30A-12345", type: "—", createdAt: "06/10/2026" },
+        { plate: "30F-67890", type: "—", createdAt: "24/09/2026" },
+        { plate: "51A-12345", type: "Car", createdAt: "05/08/2026" },
+      ];
+    }
+    const byPlate = new Map<string, { plate: string; type: string; createdAt: string }>();
+    selectedPersonTickets.forEach((ticket) => {
+      if (ticket.vehicle && !byPlate.has(ticket.vehicle)) {
+        byPlate.set(ticket.vehicle, { plate: ticket.vehicle, type: "—", createdAt: ticket.createdAt });
+      }
+    });
+    return Array.from(byPlate.values());
+  }, [selected, selectedPersonTickets]);
+
+  const profileExtras = selected?.personId === "person-linh"
+    ? { gender: "Nữ", birthDate: "12/05/1988", purpose: "Bảo trì hệ thống mạng", note: "Liên hệ cán bộ phụ trách khi đến", registeredAt: "21/07/2026" }
+    : selected?.personId === "person-one-day"
+      ? { gender: "Nam", birthDate: "10/08/1994", purpose: "Bảo trì thiết bị mạng", note: "Liên hệ anh Bảo trước khi vào khu vực làm việc", registeredAt: "22/10/2026" }
+    : { gender: "Chưa cập nhật", birthDate: "Chưa cập nhật", purpose: "Chưa cập nhật", note: "Chưa có ghi chú", registeredAt: "Chưa cập nhật" };
+
+  const personAccessHistory = useMemo(
+    () =>
+      selectedPersonTickets
+        .flatMap((ticket) =>
+          ticket.accessDates.map((date, index) => ({ ticket, date, index })),
+        )
+        .sort((a, b) => b.date.localeCompare(a.date)),
+    [selectedPersonTickets],
+  );
+
   const ticketsByAccessDate = useMemo(() => {
     const grouped = new Map<string, Ticket[]>();
-    selectedPersonTickets.forEach((ticket) => {
-      ticket.accessDates.forEach((date) => {
-        grouped.set(date, [...(grouped.get(date) || []), ticket]);
-      });
-    });
+    selectedPersonTickets.forEach((ticket) => ticket.accessDates.forEach((date) => {
+      grouped.set(date, [...(grouped.get(date) || []), ticket]);
+    }));
     return grouped;
   }, [selectedPersonTickets]);
-
+  const selectedDayTickets = ticketsByAccessDate.get(selectedCalendarDate) || [];
   const calendarDays = useMemo(() => {
     const [year, month] = calendarMonth.split("-").map(Number);
-    const firstDay = new Date(year, month - 1, 1);
+    const mondayOffset = (new Date(year, month - 1, 1).getDay() + 6) % 7;
     const totalDays = new Date(year, month, 0).getDate();
-    const mondayOffset = (firstDay.getDay() + 6) % 7;
     return [
       ...Array.from({ length: mondayOffset }, () => null),
-      ...Array.from({ length: totalDays }, (_, index) => {
-        const day = index + 1;
-        return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-      }),
+      ...Array.from({ length: totalDays }, (_, index) => `${year}-${String(month).padStart(2, "0")}-${String(index + 1).padStart(2, "0")}`),
     ];
   }, [calendarMonth]);
 
-  const selectedDayTickets =
-    ticketsByAccessDate.get(selectedCalendarDate) || [];
-
   function openTicket(ticket: Ticket) {
-    const firstAccessDate = ticket.accessDates[0] || "2026-09-01";
     setSelected(ticket);
+    setDetailMode("ticket");
+    setExpandedTicketIds(new Set([ticket.id]));
+    setShowAllScheduleDates(false);
+    const firstAccessDate = ticket.accessDates[0] || "2026-09-01";
     setSelectedCalendarDate(firstAccessDate);
     setCalendarMonth(firstAccessDate.slice(0, 7));
+  }
+
+  function openPersonProfile(ticket: Ticket) {
+    setSelected(ticket);
+    setDetailMode("person");
+    setExpandedTicketIds(new Set());
   }
 
   function changeCalendarMonth(offset: number) {
     const [year, month] = calendarMonth.split("-").map(Number);
     const next = new Date(year, month - 1 + offset, 1);
-    setCalendarMonth(
-      `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, "0")}`,
-    );
+    setCalendarMonth(`${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, "0")}`);
   }
 
   function toggleGroup(key: string) {
@@ -556,7 +612,7 @@ export default function App() {
     ]);
     const csv = [columns, ...rows]
       .map((row) =>
-        row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(","),
+        row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","),
       )
       .join("\n");
     const link = document.createElement("a");
@@ -838,7 +894,7 @@ export default function App() {
                             className="view-button"
                             onClick={(event) => {
                               event.stopPropagation();
-                              openTicket(group.tickets[0]);
+                              openPersonProfile(group.tickets[0]);
                             }}
                           >
                             <Icon name="eye" size={16} />
@@ -1038,21 +1094,26 @@ export default function App() {
             <div className="detail-page-heading">
               <button
                 className="detail-back-button"
-                onClick={() => setSelected(null)}
+                onClick={() => {
+                  if (detailMode === "ticket") setDetailMode("person");
+                  else setSelected(null);
+                }}
               >
                 <span>←</span>
-                Quay lại danh sách
+                {detailMode === "ticket" ? "Quay lại hồ sơ cá nhân" : "Quay lại danh sách"}
               </button>
               <div>
-                <h1>Chi tiết cá nhân</h1>
-                <p>
-                  Hồ sơ của {selected.fullName} theo phiếu làm việc được chọn
-                </p>
+                <h1>{detailMode === "ticket" ? "Chi tiết phiếu" : "Hồ sơ cá nhân"}</h1>
+                <p>{detailMode === "ticket" ? `Thông tin riêng của phiếu ${selected.ticketId}` : `Lịch sử ra vào của ${selected.fullName}`}</p>
               </div>
             </div>
 
             <div className="detail-layout">
+              <div className="profile-sidebar-column">
               <aside className="profile-card">
+                <div className="detail-card-title basic-info-title">
+                  <div><Icon name="user" size={18} /><strong>Thông tin cơ bản cá nhân</strong></div>
+                </div>
                 <div className="profile-identity">
                   <span className="profile-kind">HỒ SƠ KHÁCH</span>
                   <div className="profile-avatar">
@@ -1060,20 +1121,7 @@ export default function App() {
                   </div>
                   <h2>{selected.fullName}</h2>
                   <span className="profile-role">{selected.type}</span>
-                  <span className={`status ${selected.status}`}>
-                    <i />
-                    {statusLabel[selected.status]}
-                  </span>
-                </div>
-                <div className="profile-validity">
-                  <span>Thời hạn phiếu đang xem</span>
-                  <strong>
-                    {selected.createdAt} — {selected.validTo}
-                  </strong>
-                  <small>
-                    Trạng thái và thời hạn chỉ áp dụng cho phiếu{" "}
-                    {selected.ticketId}
-                  </small>
+                  {detailMode === "ticket" && <span className={`status ${selected.status}`}><i />{statusLabel[selected.status]}</span>}
                 </div>
                 <dl className="profile-info">
                   <div>
@@ -1081,14 +1129,14 @@ export default function App() {
                     <dd>{selected.citizenId || "Chưa có CCCD"}</dd>
                   </div>
                   <div>
-                    <dt>Loại cá nhân</dt>
+                    <dt>Số điện thoại</dt>
+                    <dd>{selected.phone}</dd>
+                  </div>
+                  <div>
+                    <dt>Loại</dt>
                     <dd>
                       <span className="type-chip">{selected.type}</span>
                     </dd>
-                  </div>
-                  <div>
-                    <dt>Số điện thoại</dt>
-                    <dd>{selected.phone}</dd>
                   </div>
                   <div>
                     <dt>Mã nhân viên</dt>
@@ -1103,13 +1151,150 @@ export default function App() {
                     <dd>{selected.contactUnit}</dd>
                   </div>
                   <div>
-                    <dt>Phương tiện</dt>
-                    <dd>{selected.vehicle || "—"}</dd>
+                    <dt>Giới tính</dt>
+                    <dd>{profileExtras.gender}</dd>
+                  </div>
+                  <div>
+                    <dt>Ngày sinh</dt>
+                    <dd>{profileExtras.birthDate}</dd>
                   </div>
                 </dl>
               </aside>
+              </div>
 
               <div className="detail-main-column">
+                {detailMode === "person" ? (
+                  <>
+                  <section className="detail-card person-tickets-card">
+                    <div className="detail-card-title">
+                      <div><Icon name="ticket" size={18} /><strong>Thẻ đăng ký</strong><b>{selectedPersonTickets.length}</b></div>
+                      <small>Ba phiếu gần nhất hiển thị trước; cuộn để xem các phiếu còn lại</small>
+                    </div>
+                    <div className="person-ticket-overview-list">
+                      {selectedPersonTickets.map((ticket) => (
+                        <button className="person-ticket-overview" key={ticket.id} onClick={() => openTicket(ticket)}>
+                          <span className="ticket-trigger-icon"><Icon name="ticket" size={17} /></span>
+                          <span className="person-ticket-overview-main"><strong>{ticket.ticketId}</strong><small>Từ ngày {ticket.createdAt} đến ngày {ticket.validTo}</small><span className="person-ticket-date-preview">{ticket.accessDates.slice(0, 2).map((date) => <i key={date}>{formatCalendarDate(date)}</i>)}</span></span>
+                          <span className={`status ${ticket.status}`}><i />{statusLabel[ticket.status]}</span>
+                          <span className="ticket-open-label">Xem chi tiết →</span>
+                        </button>
+                      ))}
+                    </div>
+                  </section>
+
+                  <section className="detail-card person-history-card">
+                    <div className="detail-card-title">
+                      <div><Icon name="calendar" size={18} /><strong>Lịch sử ra vào</strong><b>{personAccessHistory.length}</b></div>
+                      <small>Lịch sử ra vào của {selected.fullName}</small>
+                    </div>
+                    <div className="person-history-table-wrap">
+                      <table className="person-history-table">
+                        <thead><tr><th>THỜI GIAN</th><th>HỆ THỐNG</th><th>THIẾT BỊ</th><th>KHU VỰC</th><th>HƯỚNG</th><th>XÁC THỰC</th><th>KẾT QUẢ</th></tr></thead>
+                        <tbody>
+                          {personAccessHistory.map(({ ticket, date, index }) => (
+                            <tr key={`${ticket.id}-${date}-${index}`}>
+                              <td>{index % 2 === 0 ? "08:02:14" : "16:58:06"} {formatCalendarDate(date)}</td>
+                              <td><span className="system-chip">ACS</span></td>
+                              <td>{index % 2 === 0 ? "Cửa 200.1" : "Cửa 201.1"}</td>
+                              <td>{index % 2 === 0 ? "DC1.A.N.2.KT" : "DC1.A.N.FT.HC"}</td>
+                              <td>{index % 2 === 0 ? <span className="direction-in">↪ Vào</span> : <span className="direction-out">↩ Ra</span>}</td>
+                              <td>Khuôn mặt</td>
+                              <td><span className="result-granted">Thành công</span></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                  </>
+                ) : (
+                <section className={`person-ticket-selector ${detailMode === "ticket" ? "ticket-detail-shell" : ""}`} aria-label="Chi tiết phiếu đang xem">
+                  <div className="person-ticket-selector-heading">
+                    <div><strong>Thẻ đăng ký</strong><span>{selected.ticketId}</span></div>
+                    <small>Thông tin và lịch sử chỉ thuộc phiếu đang xem</small>
+                  </div>
+                  <div className={`person-ticket-list ${detailMode === "ticket" ? "ticket-single-view" : ""}`}>
+                    {selectedPersonTickets.filter((ticket) => ticket.id === selected.id).map((ticket) => {
+                      const isExpanded = expandedTicketIds.has(ticket.id);
+                      return (
+                        <article className={`person-ticket-accordion ${isExpanded ? "expanded" : ""}`} key={ticket.id}>
+                          <button
+                            className="person-ticket-trigger"
+                            aria-expanded={isExpanded}
+                            onClick={() => {
+                              setSelected(ticket);
+                              setExpandedTicketIds((current) => {
+                                const next = new Set(current);
+                                if (next.has(ticket.id)) next.delete(ticket.id);
+                                else next.add(ticket.id);
+                                return next;
+                              });
+                            }}
+                          >
+                            <span className="ticket-trigger-icon"><Icon name="ticket" size={17} /></span>
+                            <span className="ticket-trigger-main"><strong>{ticket.ticketId}</strong><small>Từ ngày {ticket.createdAt} đến ngày {ticket.validTo}</small></span>
+                            <span className={`status ${ticket.status}`}><i />{statusLabel[ticket.status]}</span>
+                            <span className="ticket-trigger-chevron">⌄</span>
+                          </button>
+                          {isExpanded && (
+                            <div className="person-ticket-expanded-content">
+                              <div className="ticket-card-title"><div className="ticket-card-title-label"><Icon name="user" size={23} /><strong>Thẻ Đăng ký</strong></div><span className="ticket-card-validity">Từ ngày {ticket.createdAt} đến ngày {ticket.validTo}</span></div>
+                              <section className="ticket-work-information">
+                                <div className="ticket-work-information-heading"><Icon name="calendar" size={16} /><strong>THÔNG TIN LỊCH LÀM VIỆC</strong></div>
+                                <div className="ticket-work-information-grid">
+                                  <div><span>Mục đích</span><strong>{profileExtras.purpose}</strong></div>
+                                  <div><span>Ngày đăng ký</span><strong>{profileExtras.registeredAt}</strong></div>
+                                  <div className="work-note"><span>Ghi chú</span><strong>{profileExtras.note}</strong></div>
+                                  <div className="work-area"><span>Khu vực làm việc</span><strong>{ticket.contactUnit}</strong><small>{ticket.organization}</small></div>
+                                </div>
+                              </section>
+                              <section className="ticket-registration-schedule">
+                                <div className="ticket-registration-heading"><div><Icon name="calendar" size={16} /><strong>LỊCH RA VÀO</strong></div></div>
+                                <div className="ticket-registration-days">
+                                  {[...ticket.accessDates].sort().map((date) => (
+                                    <article className="ticket-registration-day" key={date}>
+                                      <div className="ticket-registration-date"><Icon name="calendar" size={15} /><strong>{formatCalendarDate(date)}</strong></div>
+                                      <span className="ticket-registration-time">00:00 - 23:59</span>
+                                      <small>Thời hạn hiệu lực: Từ ngày {ticket.createdAt} đến ngày {ticket.validTo}</small>
+                                    </article>
+                                  ))}
+                                </div>
+                              </section>
+                              <section className="ticket-rack-section">
+                                <div className="ticket-resource-grid">
+                                  <section className="ticket-resource-panel">
+                                    <header className="ticket-resource-heading">
+                                      <div><span className="resource-symbol cage-symbol">▦</span><strong>LỒNG RACK</strong><b>1</b></div>
+                                      <span>XEM TẤT CẢ (1)</span>
+                                    </header>
+                                    <article className="ticket-rack-item">
+                                      <span className="rack-icon cage-rack-icon">▣</span>
+                                      <div><strong>CAGE-A</strong><small>Lồng máy chủ khu A</small></div>
+                                      <code>ⓘ</code>
+                                    </article>
+                                  </section>
+                                  <section className="ticket-resource-panel">
+                                    <header className="ticket-resource-heading">
+                                      <div><span className="resource-symbol rack-symbol">▤</span><strong>TỦ RACK</strong><b>1</b></div>
+                                      <span>XEM TẤT CẢ (1)</span>
+                                    </header>
+                                    <article className="ticket-rack-item">
+                                      <span className="rack-icon rack-resource-icon">▤</span>
+                                      <div><strong>SIM-GRANT-1</strong><small>Khu vực được cấp quyền · {ticket.contactUnit}</small></div>
+                                      <code>ⓘ</code>
+                                    </article>
+                                  </section>
+                                </div>
+                              </section>
+                            </div>
+                          )}
+                        </article>
+                      );
+                    })}
+                  </div>
+                </section>
+                )}
+
                 <section className="detail-card registration-card">
                   <div className="detail-card-title">
                     <div className="title-with-icon">
@@ -1421,7 +1606,26 @@ export default function App() {
                 </div>
               </div>
             </div>
-          </div>
+            <section className="detail-card person-vehicles-card profile-vehicles-full">
+              <div className="detail-card-title">
+                <div><Icon name="car" size={18} /><strong>Phương tiện</strong><b>{detailMode === "person" ? personVehicles.length : selected.vehicle ? 1 : 0}</b></div>
+              </div>
+              <div className="vehicle-table-wrap">
+                <table className="vehicle-table">
+                  <thead><tr><th>Biển số xe</th><th>Loại</th><th>Trạng thái</th><th>Ngày tạo</th></tr></thead>
+                  <tbody>
+                    {detailMode === "person" ? (
+                      personVehicles.length ? personVehicles.map((vehicle) => (
+                        <tr key={vehicle.plate}><td><strong>{vehicle.plate}</strong></td><td>{vehicle.type}</td><td><span className="vehicle-registered">Hoạt động</span></td><td>{vehicle.createdAt}</td></tr>
+                      )) : <tr><td colSpan={4} className="vehicle-empty">Chưa đăng ký phương tiện</td></tr>
+                    ) : selected.vehicle ? (
+                      <tr><td><strong>{selected.vehicle}</strong></td><td>—</td><td><span className="vehicle-registered">Hoạt động</span></td><td>{selected.createdAt}</td></tr>
+                    ) : <tr><td colSpan={4} className="vehicle-empty">Phiếu này chưa đăng ký phương tiện</td></tr>}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            </div>
         </section>
       )}
     </div>

@@ -344,7 +344,7 @@ main { min-width: 0; }
   overflow-x: auto;
 }
 
-/* Table Columns Grid Definition: Expand | Họ và tên | CCCD | Điện thoại | Đơn vị công tác | Đơn vị liên lạc | Thao tác */
+/* Table Columns Grid Definition */
 .parent-table-header, .parent-row { 
   display: grid; 
   grid-template-columns: 46px minmax(230px, 1.5fr) minmax(150px, 1fr) minmax(140px, 0.9fr) minmax(200px, 1.3fr) minmax(200px, 1.3fr) 100px; 
@@ -353,7 +353,6 @@ main { min-width: 0; }
   min-width: 1020px;
 }
 
-/* Distinct, prominent table header */
 .parent-table-header { 
   min-height: 52px; 
   padding: 0 16px; 
@@ -379,7 +378,6 @@ main { min-width: 0; }
   justify-content: center;
 }
 
-/* Parent Row */
 .person-group { 
   border-bottom: 1px solid #e2e8f0; 
   transition: all 0.15s ease;
@@ -433,7 +431,6 @@ main { min-width: 0; }
 .chevron-button svg { transition: transform 0.2s ease; }
 .person-group.open .chevron-button svg { transform: rotate(90deg); }
 
-/* Person Cell */
 .person-cell { 
   display: flex; 
   align-items: center; 
@@ -477,7 +474,6 @@ main { min-width: 0; }
   font-weight: 600;
 }
 
-/* CCCD Badge */
 .cell-cccd {
   display: flex;
   align-items: center;
@@ -811,32 +807,32 @@ td small { margin-top: 3px; color: #64748b; font-size: 12px; }
 }
 @keyframes detail-in { from { opacity: .5; transform: translateY(6px); } }
 .detail-page-inner { 
-  max-width: 1620px; 
+  max-width: 1480px; 
   min-height: 100%; 
   margin: 0 auto; 
-  padding: 28px 32px 48px; 
+  padding: 24px 28px 48px; 
 }
 .detail-page-heading { 
   display: flex; 
   align-items: center; 
   gap: 18px; 
-  margin-bottom: 24px; 
+  margin-bottom: 20px; 
 }
 .detail-page-heading h1 { 
   margin: 0; 
   color: #0f172a; 
-  font-size: 26px; 
+  font-size: 24px; 
   font-weight: 800; 
   letter-spacing: -0.02em; 
 }
 .detail-page-heading p { 
-  margin: 5px 0 0; 
+  margin: 4px 0 0; 
   color: #475569; 
-  font-size: 13.5px; 
+  font-size: 13px; 
   font-weight: 500;
 }
 .detail-back-button { 
-  min-height: 40px; 
+  min-height: 38px; 
   display: inline-flex; 
   align-items: center; 
   gap: 8px; 
@@ -845,7 +841,7 @@ td small { margin-top: 3px; color: #64748b; font-size: 12px; }
   border-radius: 8px; 
   color: #1e293b; 
   background: #ffffff; 
-  font-size: 13.5px; 
+  font-size: 13px; 
   font-weight: 700; 
   transition: all 0.16s ease; 
 }
@@ -855,103 +851,91 @@ td small { margin-top: 3px; color: #64748b; font-size: 12px; }
   background: #eff6ff; 
 }
 
-/* Detail profile summary tiles */
-.profile-summary { 
-  display: grid; 
-  grid-template-columns: repeat(3, 1fr); 
-  gap: 16px; 
-  margin-bottom: 22px; 
-}
-.summary-tile { 
-  min-height: 94px; 
-  display: flex; 
-  align-items: center; 
-  gap: 16px; 
-  padding: 18px 20px; 
-  border: 1.5px solid #e2e8f0; 
-  border-radius: 14px; 
-  background: #ffffff; 
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035); 
-}
-.summary-icon { 
-  width: 48px; 
-  height: 48px; 
-  display: grid; 
-  place-items: center; 
-  flex: 0 0 auto; 
-  border-radius: 12px; 
-  font-size: 22px; 
-  font-weight: 800; 
-}
-.summary-access .summary-icon { color: #1d4ed8; background: #eff6ff; border: 1.5px solid #dbeafe; }
-.summary-zones .summary-icon { color: #6d28d9; background: #f5f3ff; border: 1.5px solid #ede9fe; }
-.summary-latest .summary-icon { color: #047857; background: #ecfdf5; border: 1.5px solid #a7f3d0; }
-.summary-tile small { 
-  color: #64748b; 
-  font-size: 11.5px; 
-  font-weight: 700; 
-  letter-spacing: 0.05em; 
-  text-transform: uppercase;
-}
-.summary-tile strong { 
-  margin-top: 3px; 
-  color: #0f172a; 
-  font-size: 20px; 
-  font-weight: 800; 
-  display: block;
-}
-.summary-tile div > span { 
-  margin-top: 3px; 
-  color: #475569; 
-  font-size: 13px; 
-  font-weight: 500; 
-  display: block;
+/* ============================================================
+   HIDE UNWANTED LEGACY BLOCKS (QUAN TRỌNG: ẨN CÁC KHỐI THỪA)
+   ============================================================ */
+.registration-card,
+.access-card,
+.detail-record-note {
+  display: none !important;
 }
 
+/* ============================================================
+   DETAIL LAYOUT
+   ============================================================ */
+.person-detail-frame { padding: 16px; border: 1px solid #dfe6f0; border-radius: 14px; background: #fff; box-shadow: 0 4px 18px rgba(26,48,82,.045); }
 .detail-layout { 
   display: grid; 
-  grid-template-columns: 340px minmax(0, 1fr); 
-  gap: 22px; 
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); 
+  gap: 16px; 
   align-items: start; 
 }
-.profile-card, .detail-card { 
+
+.profile-sidebar-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 20px;
+}
+
+.profile-card { 
   border: 1.5px solid #e2e8f0; 
   border-radius: 14px; 
   background: #ffffff; 
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.035); 
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04); 
   overflow: hidden; 
+}
+
+.basic-info-title {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  border-bottom: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+}
+.basic-info-title > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #0f172a;
+}
+.basic-info-title strong {
+  font-size: 14px;
+  font-weight: 800;
 }
 
 .profile-identity { 
   display: flex; 
   flex-direction: column; 
   align-items: center; 
-  padding: 28px 24px 22px; 
+  padding: 18px 18px 14px; 
   border-bottom: 1.5px solid #e2e8f0; 
   background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); 
 }
 .profile-avatar { 
-  width: 86px; 
-  height: 86px; 
+  width: 58px; 
+  height: 58px; 
   display: grid; 
   place-items: center; 
-  margin-bottom: 14px; 
+  margin-bottom: 10px; 
   border-radius: 50%; 
   color: #ffffff; 
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); 
-  font-size: 26px; 
+  font-size: 20px; 
   font-weight: 800; 
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28); 
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25); 
 }
 .profile-identity h2 { 
-  margin: 0 0 8px; 
+  margin: 0 0 6px; 
   color: #0f172a; 
-  font-size: 20px; 
+  font-size: 18px; 
   font-weight: 800; 
 }
 .profile-kind { 
-  margin-bottom: 10px; 
-  padding: 4px 10px; 
+  margin-bottom: 8px; 
+  padding: 3px 10px; 
   border-radius: 12px; 
   color: #1e40af; 
   background: #dbeafe; 
@@ -960,576 +944,985 @@ td small { margin-top: 3px; color: #64748b; font-size: 12px; }
   letter-spacing: 0.06em; 
 }
 .profile-role { 
-  margin-bottom: 10px; 
+  margin-bottom: 8px; 
   padding: 4px 12px; 
   border-radius: 14px; 
   color: #6d28d9; 
   background: #f5f3ff; 
   border: 1px solid #ede9fe; 
-  font-size: 12.5px; 
-  font-weight: 700; 
-}
-
-.profile-validity { 
-  padding: 16px 22px; 
-  border-bottom: 1.5px solid #e2e8f0; 
-  background: #f8fafc; 
-}
-.profile-validity span { color: #64748b; font-size: 12px; font-weight: 600; display: block; }
-.profile-validity strong { margin-top: 4px; color: #0f172a; font-size: 13.5px; font-weight: 700; display: block; }
-.profile-validity small { margin-top: 6px; color: #b45309; font-size: 12px; font-weight: 500; display: block; }
-
-.profile-info { margin: 0; padding: 12px 22px 20px; }
-.profile-info > div { 
-  display: grid; 
-  grid-template-columns: 115px minmax(0, 1fr); 
-  gap: 10px; 
-  padding: 11px 0; 
-  border-bottom: 1px solid #f1f5f9; 
-  font-size: 13.5px; 
-}
-.profile-info > div:last-child { border-bottom: 0; }
-.profile-info dt { color: #64748b; font-weight: 600; }
-.profile-info dd { margin: 0; color: #0f172a; font-weight: 700; overflow-wrap: anywhere; }
-
-.detail-main-column { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
-.detail-card-title { 
-  min-height: 60px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between; 
-  padding: 0 22px; 
-  border-bottom: 1.5px solid #e2e8f0; 
-  background: #ffffff; 
-}
-.detail-card-title > div { 
-  display: flex; 
-  align-items: center; 
-  gap: 10px; 
-  color: #0f172a; 
-}
-.detail-card-title strong { font-size: 16px; font-weight: 800; }
-.ticket-context { 
-  padding: 5px 12px; 
-  border-radius: 14px; 
-  color: #1e40af; 
-  background: #dbeafe; 
-  border: 1px solid #bfdbfe; 
-  font-size: 12.5px; 
-  font-weight: 700; 
-}
-.detail-card-content { padding: 22px; }
-
-.detail-section-label { 
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
-  margin-bottom: 12px; 
-  color: #334155; 
   font-size: 12px; 
-  font-weight: 800; 
-  letter-spacing: 0.05em; 
-  text-transform: uppercase; 
-}
-.title-with-icon {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.card-title-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: #eff6ff;
-  color: #2563eb;
-  border: 1.5px solid #bfdbfe;
-  display: grid;
-  place-items: center;
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
+  font-weight: 700; 
 }
 
-.calendar-schedule-layout { 
-  display: grid; 
-  grid-template-columns: minmax(350px, 1fr) minmax(380px, 1.25fr); 
-  gap: 20px; 
-  align-items: stretch; 
+.profile-info { 
+  margin: 0; 
+  padding: 14px 18px 16px; 
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
 }
-.access-calendar { 
-  overflow: hidden; 
-  border: 1.5px solid #cbd5e1; 
-  border-radius: 14px; 
-  background: #ffffff; 
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+.profile-info > div { 
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
-.calendar-toolbar { 
-  height: 54px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between; 
-  padding: 0 14px; 
-  border-bottom: 1.5px solid #e2e8f0; 
-  background: #f8fafc;
+.profile-info > div:nth-child(5),
+.profile-info > div:nth-child(6) {
+  grid-column: span 2;
+  padding-top: 6px;
+  border-top: 1px dashed #e2e8f0;
 }
-.cal-nav-btn { 
-  width: 36px; 
-  height: 36px; 
-  display: grid; 
-  place-items: center; 
-  border: 1.5px solid #cbd5e1; 
-  border-radius: 9px; 
-  color: #1e293b; 
-  background: #ffffff; 
-  font-size: 18px; 
-  font-weight: 700; 
-  transition: all 0.15s ease;
-}
-.cal-nav-btn:hover {
-  background: #eff6ff;
-  border-color: #2563eb;
-  color: #2563eb;
-}
-.calendar-month-picker { 
-  width: 175px; 
-  height: 38px; 
-  justify-self: center; 
-  padding: 0 12px; 
-  border: 1.5px solid #cbd5e1; 
-  border-radius: 9px; 
-  color: #0f172a; 
-  background: #ffffff; 
-  font-size: 14px; 
-  font-weight: 700; 
-  text-align: center; 
-  outline: none;
-  cursor: pointer;
-  transition: border-color 0.15s ease;
-}
-.calendar-month-picker:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-}
-.calendar-weekdays { 
-  display: grid; 
-  grid-template-columns: repeat(7, 1fr); 
-  padding: 14px 12px 6px; 
-  background: #ffffff;
-}
-.calendar-weekdays span { 
+.profile-info dt { 
   color: #64748b; 
-  font-size: 12.5px; 
-  font-weight: 800; 
-  text-align: center; 
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.calendar-weekdays span.weekend {
-  color: #2563eb;
-}
-.calendar-grid { 
-  display: grid; 
-  grid-template-columns: repeat(7, 1fr); 
-  gap: 6px; 
-  padding: 6px 12px 14px; 
-  flex: 1;
-  align-content: start;
-}
-.cal-day-btn { 
-  min-height: 48px; 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 3px; 
-  border: 1.5px solid transparent; 
-  border-radius: 10px; 
-  color: #1e293b; 
-  background: transparent; 
-  font-size: 14px; 
-  font-weight: 600; 
-  cursor: pointer;
-  transition: all 0.15s ease;
-  position: relative;
-}
-.cal-day-btn:hover { 
-  background: #f1f5f9; 
-  border-color: #cbd5e1;
-}
-.cal-day-btn.has-tickets { 
-  color: #1d4ed8; 
-  font-weight: 800; 
-  background: #eff6ff; 
-  border-color: #bfdbfe; 
-}
-.cal-day-btn.selected { 
-  color: #ffffff !important; 
-  border-color: #2563eb !important; 
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; 
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35); 
-  font-weight: 800;
-}
-.day-number {
-  line-height: 1;
-}
-.day-badge-dot { 
-  display: flex; 
-  align-items: center; 
-  gap: 3px; 
-  font-style: normal; 
-}
-.day-badge-dot .dot { 
-  width: 6px; 
-  height: 6px; 
-  border-radius: 50%; 
-  background: #2563eb; 
-  display: block; 
-}
-.cal-day-btn.selected .day-badge-dot .dot { 
-  background: #ffffff; 
-}
-.day-badge-dot .count-pill { 
-  color: #ffffff; 
-  background: #2563eb;
-  padding: 0 5px;
-  border-radius: 6px;
-  font-size: 9px; 
-  font-weight: 800; 
-  font-style: normal; 
-}
-.cal-day-btn.selected .day-badge-dot .count-pill { 
-  background: #ffffff;
-  color: #2563eb; 
-}
-.calendar-legend { 
-  min-height: 44px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between; 
-  padding: 0 16px; 
-  border-top: 1.5px solid #e2e8f0; 
-  background: #f8fafc; 
-  font-size: 12.5px; 
-  font-weight: 600; 
-  color: #475569; 
-}
-.legend-indicator {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  font-size: 11.5px; 
   font-weight: 700;
-  color: #334155;
+  letter-spacing: 0.02em;
 }
-.dot-active { 
-  width: 8px; 
-  height: 8px; 
-  border-radius: 50%; 
-  background: #2563eb; 
-  display: inline-block; 
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+.profile-info dd { 
+  margin: 0; 
+  color: #0f172a; 
+  font-size: 13px;
+  font-weight: 700; 
+  overflow-wrap: anywhere; 
 }
 
-/* Day Ticket Panel */
-.day-ticket-panel { 
-  border: 1.5px solid #cbd5e1; 
-  border-radius: 14px; 
-  background: #ffffff; 
+/* Vehicle Card */
+.person-vehicles-card {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
   box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
   overflow: hidden;
+  margin-top: 14px;
+}
+.person-vehicles-card.profile-vehicles-full {
+  margin-top: 0;
+  grid-column: auto;
+}
+.person-vehicles-card .detail-card-title {
+  min-height: 44px;
   display: flex;
-  flex-direction: column;
-  min-height: 410px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1.5px solid #e2e8f0;
+  background: #f8fafc;
 }
-.day-ticket-heading { 
-  min-height: 64px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between; 
-  padding: 0 20px; 
-  border-bottom: 1.5px solid #e2e8f0; 
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-}
-.day-ticket-heading .sub-title { 
-  color: #64748b; 
-  font-size: 11px; 
-  font-weight: 800; 
-  letter-spacing: 0.06em; 
-  display: block; 
-  text-transform: uppercase;
-  margin-bottom: 2px;
-}
-.day-ticket-heading .main-date { 
-  color: #0f172a; 
-  font-size: 18px; 
-  font-weight: 800; 
-  display: block; 
-}
-.day-count-badge { 
-  padding: 5px 12px; 
-  border-radius: 20px; 
-  color: #1d4ed8; 
-  background: #eff6ff; 
-  border: 1.5px solid #bfdbfe;
-  font-size: 13px; 
-  font-weight: 700; 
-}
-.day-count-badge b {
-  font-weight: 800;
-}
-
-/* Day Ticket List (When Tickets Exist) */
-.day-ticket-list { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 12px; 
-  max-height: 380px; 
-  overflow-y: auto; 
-  padding: 16px; 
-  flex: 1;
-}
-.day-ticket-item { 
-  width: 100%;
-  padding: 14px 16px; 
-  border: 1.5px solid #cbd5e1; 
-  border-radius: 12px; 
-  background: #ffffff; 
-  text-align: left; 
-  transition: all 0.18s ease; 
-  cursor: pointer;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
-}
-.day-ticket-item:hover { 
-  border-color: #2563eb; 
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
-  transform: translateY(-1px);
-}
-.day-ticket-item.current { 
-  border-color: #2563eb; 
-  background: #eff6ff; 
-  border-left: 5px solid #2563eb; 
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.15);
-}
-.day-ticket-topline { 
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between; 
-  margin-bottom: 8px; 
-}
-.viewing-pill {
-  font-size: 11px;
-  font-weight: 800;
-  color: #1d4ed8;
-  background: #dbeafe;
-  border: 1px solid #bfdbfe;
-  padding: 3px 8px;
-  border-radius: 12px;
-  text-transform: uppercase;
-}
-.click-view-hint {
-  font-size: 12px;
-  font-weight: 600;
-  color: #64748b;
-}
-.day-ticket-body {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.ticket-id-row {
+.person-vehicles-card .detail-card-title > div {
   display: flex;
   align-items: center;
   gap: 8px;
+  color: #0f172a;
+}
+.person-vehicles-card .detail-card-title strong {
+  font-size: 13.5px;
+  font-weight: 800;
+}
+.person-vehicles-card .detail-card-title b {
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #1e40af;
+  background: #dbeafe;
+}
+.vehicle-table-wrap {
+  padding: 8px 12px;
+}
+.vehicle-table {
+  width: 100%;
+}
+.vehicle-table-head,.vehicle-table-row {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  align-items: center;
+}
+.vehicle-table-head {
+  min-height: 32px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  border-bottom: 1px solid #e2e8f0;
+}
+.vehicle-table-head span,.vehicle-table-row > * { min-width: 0; padding: 5px 8px; overflow-wrap: anywhere; }
+.vehicle-table-row {
+  min-height: 40px;
+  color: #334155;
+  font-size: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.vehicle-table-row:last-child { border-bottom: 0; }
+.vehicle-table-row strong {
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+}
+.vehicle-table-row .vehicle-registered { font-style: normal; }
+.vehicle-empty-row {
+  min-height: 42px;
+  display: grid;
+  grid-column: 1 / -1;
+  place-items: center;
+  color: #94a3b8;
+  font-size: 11px;
+  font-style: italic;
+}
+.vehicle-empty {
+  text-align: center;
+  color: #94a3b8 !important;
+  font-style: italic;
+  font-size: 12.5px;
+  padding: 14px 8px !important;
+}
+.vehicle-registered {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #047857;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+/* ============================================================
+   DETAIL MAIN COLUMN
+   ============================================================ */
+.detail-main-column { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 16px; 
+  min-width: 0; 
+}
+
+/* Person Mode Cards */
+.person-tickets-card,
+.person-history-card {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+}
+.person-tickets-card .detail-card-title,
+.person-history-card .detail-card-title {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1.5px solid #e2e8f0;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+.person-tickets-card .detail-card-title > div,
+.person-history-card .detail-card-title > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #0f172a;
+}
+.person-tickets-card .detail-card-title strong,
+.person-history-card .detail-card-title strong {
+  font-size: 15px;
+  font-weight: 800;
+}
+.person-tickets-card .detail-card-title b,
+.person-history-card .detail-card-title b {
+  padding: 2px 8px;
+  border-radius: 12px;
+  color: #1e40af;
+  background: #dbeafe;
+  font-size: 12px;
+  font-weight: 800;
+}
+.person-tickets-card .detail-card-title small,
+.person-history-card .detail-card-title small {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.person-ticket-overview-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 18px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.person-ticket-overview {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  text-align: left;
+  transition: all 0.16s ease;
+  cursor: pointer;
+}
+.person-ticket-overview:hover {
+  border-color: #2563eb;
+  background: #f8faff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+  transform: translateY(-1px);
+}
+.ticket-trigger-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
   color: #2563eb;
-  font-size: 14.5px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  flex: 0 0 auto;
+}
+.person-ticket-overview-main {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.person-ticket-overview-main strong {
+  color: #2563eb;
+  font-size: 14px;
   font-weight: 800;
   font-family: ui-monospace, monospace;
 }
-.ticket-time-row, .ticket-unit-row {
+.person-ticket-overview-main small {
+  color: #64748b;
+  font-size: 12px;
+}
+.person-ticket-date-preview {
+  display: flex;
+  gap: 6px;
+  margin-top: 3px;
+}
+.person-ticket-date-preview i {
+  font-style: normal;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1e40af;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+}
+.ticket-open-label {
+  color: #2563eb;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Person History Table */
+.person-history-table-wrap {
+  overflow-x: auto;
+  max-height: 280px;
+}
+.person-history-table {
+  width: 100%;
+  min-width: 780px;
+  border-collapse: collapse;
+}
+.person-history-table th {
+  height: 42px;
+  padding: 0 14px;
+  border-bottom: 2px solid #e2e8f0;
+  color: #334155;
+  background: #f8fafc;
+  font-size: 11.5px;
+  font-weight: 800;
+}
+.person-history-table td {
+  height: 50px;
+  padding: 8px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  font-size: 13px;
+}
+.direction-in { color: #047857; font-weight: 800; }
+.direction-out { color: #b45309; font-weight: 800; }
+
+/* Ticket Detail Mode Styles */
+.ticket-detail-shell {
+  margin: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.ticket-detail-shell > .person-ticket-selector-heading,
+.ticket-single-view > .person-ticket-accordion > .person-ticket-trigger {
+  display: none !important;
+}
+.ticket-detail-shell .person-ticket-list.ticket-single-view {
+  display: block;
+  padding: 0;
+}
+.ticket-detail-shell .person-ticket-accordion {
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.ticket-detail-shell .person-ticket-expanded-content {
+  padding: 0;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+}
+
+.ticket-card-title {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 20px;
+  border-bottom: 1.5px solid #e2e8f0;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+.ticket-card-title-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ticket-card-title svg {
+  padding: 3px;
+  border-radius: 6px;
+  color: white;
+  background: #1e3a8a;
+}
+.ticket-card-title strong {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.ticket-card-validity {
+  color: #64748b;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+/* THÔNG TIN LỊCH LÀM VIỆC */
+.ticket-work-information {
+  margin: 14px 18px 0;
+  padding: 14px 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+.ticket-work-information-heading {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
-  color: #334155;
+  margin-bottom: 10px;
+  color: #1e3a8a;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
-.ticket-unit-row small {
-  font-size: 12.5px;
-  color: #475569;
+.ticket-work-information-heading strong {
+  color: #1e3a8a;
 }
-.ticket-unit-row b {
-  color: #0f172a;
+.ticket-work-information-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
-
-/* Beautiful Empty State */
-.day-ticket-empty { 
-  flex: 1;
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
-  padding: 36px 24px; 
-  text-align: center;
+.ticket-work-information-grid > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
   background: #ffffff;
 }
-.day-ticket-empty-icon {
-  width: 68px;
-  height: 68px;
-  border-radius: 20px;
-  background: #eff6ff;
-  border: 1.5px solid #dbeafe;
-  color: #2563eb;
-  display: grid;
-  place-items: center;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
-}
-.day-ticket-empty strong { 
-  color: #0f172a; 
-  font-size: 16px; 
-  font-weight: 800; 
-  margin-bottom: 6px;
-  display: block;
-}
-.day-ticket-empty p { 
-  margin: 0 0 14px; 
-  font-size: 13.5px; 
-  color: #475569; 
-}
-.day-ticket-empty p b {
-  color: #0f172a;
+.ticket-work-information-grid span {
+  color: #64748b;
+  font-size: 11.5px;
   font-weight: 700;
 }
-.empty-hint {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  border-radius: 20px;
-  background: #f8fafc;
-  border: 1.5px solid #e2e8f0;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #475569;
-  margin-bottom: 18px;
-}
-.dot-hint {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #2563eb;
-  flex: 0 0 auto;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-}
-.btn-select-active-date {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
-  border-radius: 9px;
+.ticket-work-information-grid strong {
+  color: #0f172a;
   font-size: 13px;
   font-weight: 700;
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  color: #ffffff;
-  border: none;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.ticket-work-information-grid small {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* LỊCH RA VÀO (KHỐNG CHẾ CHIỀU CAO - 1 NGÀY THÌ TRẢI ĐẸP, NHIỀU NGÀY THÌ LƯỚI 2 CỘT CUỘN) */
+.ticket-registration-schedule {
+  position: relative;
+  padding: 14px 18px 12px;
+}
+.ticket-registration-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.ticket-registration-heading > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1e3a8a;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+.ticket-registration-heading strong {
+  color: #1e3a8a;
+}
+.ticket-schedule-filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ticket-schedule-filter-button,
+.ticket-schedule-clear-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border: 1px solid #dbeafe;
+  border-radius: 6px;
+  color: #2563eb;
+  background: #ffffff;
+  font-size: 10px;
   cursor: pointer;
-  transition: all 0.18s ease;
 }
-.btn-select-active-date:hover {
-  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+.ticket-schedule-filter-button:hover,
+.ticket-schedule-clear-filter:hover {
+  background: #eff6ff;
+}
+.ticket-schedule-clear-filter {
+  border-color: transparent;
+  background: transparent;
+}
+.ticket-schedule-date-picker {
+  position: absolute;
+  top: 43px;
+  right: 18px;
+  z-index: 20;
+  width: 270px;
+  padding: 12px;
+  border: 1px solid #dbe4f0;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgb(15 23 42 / 16%);
+}
+.ticket-schedule-date-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.ticket-schedule-date-picker-header strong {
+  color: #0f172a;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+.ticket-schedule-date-picker-header button {
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  color: #2563eb;
+  background: #eff6ff;
+  font-size: 18px;
+  cursor: pointer;
+}
+.ticket-schedule-date-weekdays,
+.ticket-schedule-date-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  text-align: center;
+}
+.ticket-schedule-date-weekdays {
+  margin-bottom: 4px;
+  color: #64748b;
+  font-size: 9px;
+  font-weight: 700;
+}
+.ticket-schedule-date-grid {
+  gap: 3px 0;
+}
+.ticket-schedule-date-grid button {
+  width: 28px;
+  height: 28px;
+  justify-self: center;
+  border: 0;
+  border-radius: 50%;
+  color: #334155;
+  background: transparent;
+  font-size: 10px;
+  cursor: pointer;
+}
+.ticket-schedule-date-grid button:hover,
+.ticket-schedule-date-grid button.in-range {
+  color: #1d4ed8;
+  background: #eff6ff;
+}
+.ticket-schedule-date-grid button.selected {
+  color: #ffffff;
+  background: #2563eb;
+}
+.ticket-schedule-date-picker > small {
+  display: block;
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 9px;
+}
+.ticket-schedule-empty {
+  grid-column: 1 / -1;
+  padding: 14px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  color: #64748b;
+  background: #f8fafc;
+  font-size: 11px;
+  text-align: center;
 }
 
-.registration-resource { margin-top: 20px; padding-top: 18px; border-top: 1.5px solid #e2e8f0; }
-.resource-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-.resource-item { 
-  display: flex; 
-  align-items: center; 
-  gap: 12px; 
-  padding: 12px 14px; 
-  border: 1.5px solid #cbd5e1; 
-  border-radius: 10px; 
-  background: #ffffff; 
-}
-.resource-icon { 
-  width: 40px; 
-  height: 40px; 
-  display: grid; 
-  place-items: center; 
-  flex: 0 0 auto; 
-  border-radius: 10px; 
-  color: #7c3aed; 
-  background: #f5f3ff; 
-  border: 1px solid #ede9fe; 
-  font-size: 18px; 
-}
-.resource-icon.cage { color: #0284c7; background: #f0f9ff; border-color: #e0f2fe; }
-.resource-item strong { color: #0f172a; font-size: 14px; font-weight: 700; }
-.resource-item small { color: #64748b; font-size: 12px; }
-.resource-item > span:last-child { color: #475569; font-size: 12px; font-weight: 600; font-family: monospace; }
-
-/* Access history table */
-.access-table-wrap { overflow-x: auto; }
-.access-table { min-width: 820px; }
-.access-table th { 
-  height: 44px; 
-  padding: 0 14px; 
-  border-bottom: 2px solid #e2e8f0; 
-  color: #334155; 
-  background: #f8fafc; 
-  font-size: 11.5px; 
-  font-weight: 800; 
-}
-.access-table td { 
-  height: 54px; 
-  padding: 8px 14px; 
-  font-size: 13px; 
-  color: #1e293b; 
-}
-.system-chip { 
-  padding: 4px 9px; 
-  border-radius: 6px; 
-  color: #334155; 
-  background: #f1f5f9; 
-  border: 1px solid #cbd5e1; 
-  font-size: 12px; 
-  font-weight: 700; 
-}
-.direction-in { color: #059669; font-size: 18px; font-weight: 800; }
-.direction-out { color: #d97706; font-size: 18px; font-weight: 800; }
-.result-granted { 
-  padding: 4px 10px; 
-  border-radius: 14px; 
-  color: #047857; 
-  background: #ecfdf5; 
-  border: 1.5px solid #a7f3d0; 
-  font-size: 12px; 
-  font-weight: 700; 
+.ticket-registration-days {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 2px 4px 4px 0;
 }
 
-.detail-record-note { 
-  display: flex; 
-  align-items: flex-start; 
-  gap: 12px; 
-  padding: 16px 18px; 
-  border: 1.5px solid #bfdbfe; 
-  border-radius: 12px; 
-  color: #1e40af; 
-  background: #eff6ff; 
+.ticket-registration-day {
+  width: 100%;
+  min-width: 0;
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 9px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  transition: all 0.15s ease;
 }
-.detail-record-note svg { flex: 0 0 auto; color: #2563eb; }
-.detail-record-note p { margin: 0; font-size: 13px; line-height: 1.6; font-weight: 500; }
-.detail-record-note strong { font-weight: 800; color: #1e3a8a; }
+.ticket-registration-time-control {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.ticket-time-summary {
+  width: 100%;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 6px;
+  color: #5578ad;
+  background: #edf4ff;
+  text-align: left;
+  font-size: 9px;
+}
+.ticket-time-summary-icon {
+  flex: 0 0 auto;
+  margin-right: 3px;
+  color: #2563eb;
+  font-size: 15px;
+  line-height: 1;
+}
+.ticket-time-summary strong {
+  color: #2563eb;
+  font-weight: 700;
+}
+.ticket-registration-day:hover {
+  border-color: #2563eb;
+  background: #f8faff;
+}
+.ticket-registration-date {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+.ticket-registration-date > div, 
+.ticket-registration-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #2563eb;
+}
+.ticket-registration-date strong {
+  min-width: 0;
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 800;
+}
+.ticket-registration-time-range {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-self: stretch;
+  gap: 3px;
+  padding: 2px 7px;
+  border-radius: 12px;
+  color: #1d4ed8;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+.ticket-registration-time-range label {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.ticket-registration-time-range label > span {
+  color: #64748b;
+  font-size: 8px;
+}
+.ticket-registration-time-range .ticket-time-field {
+  gap: 1px;
+}
+.ticket-registration-time-range .ticket-time-field > span:not(:first-child) {
+  color: #1d4ed8;
+  font-size: 9px;
+  font-weight: 700;
+}
+.ticket-registration-time-range .ticket-time-picker-icon {
+  margin-left: 2px;
+  color: #334155;
+  font-size: 12px;
+}
+.ticket-registration-time-range select {
+  width: 28px;
+  min-width: 0;
+  padding: 2px 0;
+  border: 0;
+  outline: none;
+  color: #1d4ed8;
+  background: transparent;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: ui-monospace, monospace;
+  appearance: none;
+  cursor: pointer;
+}
+.ticket-registration-time-range select:disabled {
+  color: #64748b;
+  cursor: default;
+}
+.ticket-time-separator {
+  color: #1d4ed8;
+  font-size: 10px;
+}
+.ticket-registration-time-range:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgb(37 99 235 / 10%);
+}
+/* Legacy compact time badge styling kept for other ticket summaries. */
+.ticket-registration-time {
+  justify-self: end;
+  padding: 3px 6px;
+  border-radius: 12px;
+  color: #1d4ed8;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  font-size: 9px;
+  font-weight: 700;
+  font-family: ui-monospace, monospace;
+}
+.ticket-registration-day small {
+  grid-column: 1 / -1;
+  min-width: 0;
+  color: #64748b;
+  font-size: 9px;
+  font-weight: 500;
+}
+.ticket-access-show-all {
+  display: block;
+  margin: 8px auto 0;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 6px;
+  color: #1d4ed8;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ticket-access-show-all:hover {
+  background: #eff6ff;
+}
+.schedule-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgb(15 23 42 / 42%);
+}
+.schedule-popup {
+  width: min(900px, 100%);
+  max-height: min(82vh, 760px);
+  overflow: hidden;
+  border: 1px solid #dbe4f0;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgb(15 23 42 / 24%);
+}
+.schedule-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.schedule-popup-header > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #1e40af;
+}
+.schedule-popup-header strong {
+  color: #0f172a;
+  font-size: 15px;
+}
+.schedule-popup-header span {
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: #1d4ed8;
+  background: #eff6ff;
+  font-size: 11px;
+}
+.schedule-popup-header button {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 7px;
+  color: #64748b;
+  background: #f1f5f9;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.schedule-popup-days {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  max-height: calc(min(82vh, 760px) - 64px);
+  overflow-y: auto;
+  padding: 18px 20px 20px;
+}
+.schedule-popup-days .ticket-registration-day {
+  width: 100%;
+}
+.resource-popup .schedule-popup-header .resource-symbol {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 8px;
+}
+.resource-popup-items {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-height: calc(min(82vh, 760px) - 64px);
+  overflow-y: auto;
+  padding: 18px 20px 20px;
+}
+
+/* LỒNG RACK & TỦ RACK */
+.ticket-detail-shell .ticket-rack-section {
+  margin: 0 18px 14px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.ticket-resource-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.ticket-resource-panel {
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 11px;
+  background: #f8fafc;
+}
+.ticket-resource-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.ticket-resource-heading > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ticket-resource-heading strong {
+  color: #334155;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+.ticket-resource-heading b {
+  padding: 2px 7px;
+  border-radius: 10px;
+  color: #1e40af;
+  background: #dbeafe;
+  font-size: 11px;
+  font-weight: 800;
+}
+.ticket-resource-heading > span {
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ticket-resource-heading > button {
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 5px;
+  color: #2563eb;
+  background: transparent;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ticket-resource-heading > button:hover {
+  background: #eff6ff;
+}
+.resource-symbol {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.cage-symbol {
+  color: #0284c7;
+  background: #e0f2fe;
+}
+.rack-symbol {
+  color: #7c3aed;
+  background: #f3e8ff;
+}
+.ticket-resource-items {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.ticket-rack-item {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+}
+.rack-icon {
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.rack-icon.cage, .cage-rack-icon {
+  color: #0284c7;
+  background: #e0f2fe;
+}
+.rack-resource-icon {
+  color: #7c3aed;
+  background: #f3e8ff;
+}
+.ticket-rack-item > div {
+  min-width: 0;
+  flex: 1;
+}
+.ticket-rack-item strong {
+  color: #0f172a;
+  font-size: 11px;
+  font-weight: 700;
+  display: block;
+}
+.ticket-rack-item small {
+  margin-top: 2px;
+  overflow: hidden;
+  color: #64748b;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+.ticket-rack-item code {
+  color: #94a3b8;
+  font-size: 13px;
+}
 
 /* Responsive adjustments */
-@media (max-width: 1400px) {
-  .detail-layout { grid-template-columns: 310px minmax(0, 1fr); }
-  .calendar-schedule-layout { grid-template-columns: 1fr; }
+@media (max-width: 1024px) {
+  .person-detail-frame { padding: 10px; }
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+  .profile-sidebar-column {
+    position: static;
+  }
 }
 
-@media (max-width: 1250px) {
-  .page { padding-inline: 20px; }
-  .parent-table-header, .parent-row { 
-    grid-template-columns: 42px minmax(200px, 1.4fr) 135px 130px minmax(170px, 1fr) minmax(170px, 1fr) 90px; 
+@media (max-width: 700px) {
+  .ticket-registration-days {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ticket-resource-grid {
+    grid-template-columns: 1fr;
+  }
+  .schedule-popup-days {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .resource-popup-items {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 460px) {
+  .ticket-registration-days,
+  .ticket-resource-items,
+  .schedule-popup-days,
+  .resource-popup-items {
+    grid-template-columns: 1fr;
   }
 }
